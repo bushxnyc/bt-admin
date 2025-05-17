@@ -24,7 +24,7 @@ type Membership = {
 type User = {
   id: string;
   cognitoId: string;
-  lastSignIn: unknown;
+  lastSignIn: string;
   isDeactivated: boolean;
   userDevices: { id: string }[] | [];
   subscriber: Subscriber | null;

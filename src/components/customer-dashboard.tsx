@@ -17,6 +17,7 @@ import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, Di
 import CustomerDetail from "@/components/customer-detail";
 import { updateCustomer, searchUsers } from "@/lib/actions";
 import { Customer, MembershipStatus } from "@/lib/types";
+import { formatTimeAgo } from "@/lib/utils";
 
 export default function CustomerDashboard({ username, firstName, lastName, email }: { username: string; firstName: string; lastName: string; email: string }) {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>(null);
@@ -146,7 +147,10 @@ export default function CustomerDashboard({ username, firstName, lastName, email
                       {customer?.firstName} {customer?.lastName}
                     </h3>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
-                      <span>{customer?.email}</span>
+                      <span>{customer?.email.toLowerCase()}</span>
+                    </div>{" "}
+                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
+                      <span>Seen: {formatTimeAgo(customer?.user.lastSignIn) || ""}</span>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
