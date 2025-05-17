@@ -27,6 +27,8 @@
   }
 
   .dark {
+    --section-bg: #4a4a494a;
+    --input-bg: #8686854a;
     --background: 240 7% 8%;
     --foreground: 0 0% 98%;
     --card: 230 8% 15%;

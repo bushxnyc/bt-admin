@@ -265,10 +265,10 @@ export default function CustomerDashboard({ username, firstName, lastName, email
                   {/* Row 1: Member ID and Processor */}
                   <div className="grid grid-cols-2 gap-2">
                     <div
-                      className="flex flex-col items-center justify-center text-center p-2 border rounded-md cursor-pointer hover:bg-muted/50 transition-colors"
+                      className="flex flex-col bg-[var(--section-bg)] items-center justify-start text-center p-2 border rounded-md cursor-pointer hover:bg-muted/50 transition-colors"
                       onClick={() => copyToClipboard(customer?.user?.recentMembership?.killbillPaymentMethodExternalKey || "", "EPOCH")}
                     >
-                      <div className="text-xs text-muted-foreground mb-1 flex items-center">
+                      <div className="text-base text-muted-foreground mb-1 flex items-center">
                         Member ID
                         {copiedId === customer?.user?.recentMembership?.killbillPaymentMethodExternalKey ? (
                           <Check className="h-3 w-3 ml-1 text-green-500" />
@@ -278,27 +278,27 @@ export default function CustomerDashboard({ username, firstName, lastName, email
                       </div>
                       <div className="font-medium text-sm">{customer?.user.recentMembership?.killbillPaymentMethodExternalKey}</div>
                     </div>
-                    <div className="flex flex-col items-center justify-center text-center p-2 border rounded-md">
-                      <div className="text-xs text-muted-foreground mb-1">Processor</div>
+                    <div className="flex flex-col bg-[var(--section-bg)] items-center justify-start text-center p-2 border rounded-md">
+                      <div className="text-base text-muted-foreground mb-1">Processor</div>
                       <div className="font-medium text-sm">{customer?.user.recentMembership?.killbillPaymentMethodPluginName}</div>
                     </div>
                   </div>
 
                   {/* Row 2: Account Status and Subscription Status */}
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="flex flex-col items-center justify-center text-center p-2 border rounded-md">
-                      <div className="text-xs text-muted-foreground mb-1">Account Status</div>
+                    <div className="flex flex-col bg-[var(--section-bg)] items-center justify-start text-center p-2 border rounded-md">
+                      <div className="text-base text-muted-foreground mb-1">Account</div>
                       <div>{getStatusBadge(customer?.user.isDeactivated || false)}</div>
                     </div>
-                    <div className="flex flex-col items-center justify-center text-center p-2 border rounded-md">
-                      <div className="text-xs text-muted-foreground mb-1">Subscription</div>
+                    <div className="flex flex-col bg-[var(--section-bg)] items-center justify-start text-center p-2 border rounded-md">
+                      <div className="text-base text-muted-foreground mb-1">Subscription</div>
                       <div>{getSubscriptionStatusBadge(customer?.user.recentMembership?.status || "")}</div>
                     </div>
                   </div>
 
                   {/* Row 3: Devices */}
-                  <div className="flex flex-col items-center justify-center text-center p-2 border rounded-md">
-                    <div className="text-xs text-muted-foreground mb-1">Devices</div>
+                  <div className="flex flex-col bg-[var(--section-bg)] items-center justify-center text-center p-2 border rounded-md">
+                    <div className="text-base text-muted-foreground mb-1">Devices</div>
                     <div className="font-medium text-sm">{customer?.user.userDevices.length || 0}</div>
                   </div>
                 </div>
@@ -306,10 +306,10 @@ export default function CustomerDashboard({ username, firstName, lastName, email
                 {/* Desktop layout */}
                 <div className="hidden md:grid md:grid-cols-5 gap-4 mt-4">
                   <div
-                    className="flex flex-col items-center justify-center text-center p-2 cursor-pointer hover:bg-muted/50 rounded-md transition-colors"
+                    className="flex flex-col bg-[var(--section-bg)]  shadow-md shadow-black/10 items-center justify-start text-center p-2 cursor-pointer hover:bg-muted/50 rounded-md transition-colors"
                     onClick={() => copyToClipboard(customer?.user?.recentMembership?.killbillPaymentMethodExternalKey || "", "EPOCH")}
                   >
-                    <div className="text-xs text-muted-foreground mb-1 flex items-center">
+                    <div className="text-base text-muted-foreground mb-1 flex items-center">
                       Member ID
                       {copiedId === customer?.user?.recentMembership?.killbillPaymentMethodExternalKey ? (
                         <Check className="h-3 w-3 ml-1 text-green-500" />
@@ -320,23 +320,23 @@ export default function CustomerDashboard({ username, firstName, lastName, email
                     <div className="font-medium text-sm">{customer?.user.recentMembership?.killbillPaymentMethodExternalKey}</div>
                   </div>
 
-                  <div className="flex flex-col items-center justify-center text-center p-2">
-                    <div className="text-xs text-muted-foreground mb-1">Account Status</div>
+                  <div className="flex flex-col rounded-md  bg-[var(--section-bg)] shadow-md shadow-black/10 items-center justify-start text-center p-2">
+                    <div className="text-base text-muted-foreground mb-1">Account</div>
                     <div>{getStatusBadge(customer?.user.isDeactivated || false)}</div>
                   </div>
 
-                  <div className="flex flex-col items-center justify-center text-center p-2">
-                    <div className="text-xs text-muted-foreground mb-1">Subscription Status</div>
+                  <div className="flex flex-col rounded-md bg-[var(--section-bg)] shadow-md shadow-black/10 items-center justify-start text-center p-2">
+                    <div className="text-base text-muted-foreground mb-1">Membership</div>
                     <div>{getSubscriptionStatusBadge(customer?.user.recentMembership?.status || "")}</div>
                   </div>
 
-                  <div className="flex flex-col items-center justify-center text-center p-2">
-                    <div className="text-xs text-muted-foreground mb-1">Processor</div>
+                  <div className="flex flex-col rounded-md bg-[var(--section-bg)] shadow-md shadow-black/10 items-center justify-start text-center p-2">
+                    <div className="text-base text-muted-foreground mb-1">Processor</div>
                     <div className="font-medium text-sm">{customer?.user.recentMembership?.killbillPaymentMethodPluginName}</div>
                   </div>
 
-                  <div className="flex flex-col items-center justify-center text-center p-2">
-                    <div className="text-xs text-muted-foreground mb-1">Devices</div>
+                  <div className="flex flex-col rounded-md bg-[var(--section-bg)] shadow-md shadow-black/10 items-center justify-start text-center p-2">
+                    <div className="text-base text-muted-foreground mb-1">Devices</div>
                     <div className="font-medium text-sm">{customer?.user.isDeactivated || 1}</div>
                   </div>
                 </div>

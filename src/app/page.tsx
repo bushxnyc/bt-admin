@@ -29,7 +29,7 @@ export default function Home() {
 
       <div className="bg-card border rounded-lg p-4">
         <form className="space-y-4">
-          <div className="grid grid-cols-2 gap-4">
+          <div className="grid grid-cols-2 gap-2">
             {/* First row - First Name and Last Name (always on same row) */}
             <div className="space-y-2">
               <Label htmlFor="email">Email</Label>
@@ -38,6 +38,7 @@ export default function Home() {
                 name="email"
                 placeholder=""
                 value={email}
+                className="bg-[var(--input-bg)]"
                 onChange={(e) => {
                   setEmail(e.target.value);
                 }}
@@ -50,6 +51,7 @@ export default function Home() {
                 name="username"
                 placeholder=""
                 value={username}
+                className="bg-[var(--input-bg)]"
                 onChange={(e) => {
                   setUsername(e.target.value);
                 }}
@@ -62,6 +64,7 @@ export default function Home() {
                 id="firstName"
                 name="firstName"
                 placeholder=""
+                className="bg-[var(--input-bg)]"
                 value={firstName}
                 onChange={(e) => {
                   setFirstName(e.target.value);
@@ -74,6 +77,7 @@ export default function Home() {
                 id="lastName"
                 name="lastName"
                 placeholder=""
+                className="bg-[var(--input-bg)]"
                 value={lastName}
                 onChange={(e) => {
                   setLastName(e.target.value);
@@ -86,7 +90,7 @@ export default function Home() {
             {/* Second row - Username and Email (always on same row) */}
           </div>
           <div className="flex justify-end">
-            <Button type="submit" className="flex items-center gap-2" onClick={clearForm}>
+            <Button type="submit" className="flex w-full md:w-auto items-center gap-2" onClick={clearForm}>
               Clear
             </Button>
           </div>
