@@ -198,7 +198,7 @@ export default function CustomerDashboard({ username, firstName, lastName, email
             </Button>
           </div>
 
-          <div className="space-y-4">
+          <div className="w-full gap-3 grid md:grid-cols-2">
             {customers.map((customer) => (
               <div key={customer?.id} className="border rounded-lg p-4 hover:border-primary transition-colors bg-card">
                 <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
