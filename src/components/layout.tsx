@@ -1,20 +1,17 @@
-import "@/app/globals.css";
-import { Inter } from "next/font/google";
-import { ThemeProvider } from "@/components/theme-provider";
-import Script from "next/script";
-import { NuqsAdapter } from "nuqs/adapters/next/app";
+import "@/app/globals.css"
+import { Inter } from "next/font/google"
+import { ThemeProvider } from "@/components/theme-provider"
+import Script from "next/script"
 
-const inter = Inter({ subsets: ["latin"] });
+const inter = Inter({ subsets: ["latin"] })
 
 export const metadata = {
   title: "Customer Management Dashboard",
   description: "Manage your streaming service customers",
-  generator: "v0.dev",
-};
+    generator: 'v0.dev'
+}
 
-import { ReactNode } from "react";
-
-export default function RootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }) {
   return (
     <html lang="en" suppressHydrationWarning>
       <head>
@@ -32,9 +29,9 @@ export default function RootLayout({ children }: { children: ReactNode }) {
       </head>
       <body className={inter.className}>
         <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <NuqsAdapter>{children}</NuqsAdapter>
+          {children}
         </ThemeProvider>
       </body>
     </html>
-  );
+  )
 }

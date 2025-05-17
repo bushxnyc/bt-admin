@@ -1,0 +1,586 @@
+type DeleteAll {
+  count: Int!
+}
+
+type EraseAll {
+  count: Int!
+}
+
+type RestoreAll {
+  count: Int!
+}
+
+type Subscriber {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  userId: ID!
+  user: User!
+  convertkitId: String!
+  email: String!
+  firstName: String!
+  isActive: Boolean!
+}
+
+"""
+A date-time string at UTC, such as 2019-12-03T09:54:33Z, compliant with the date-time format.
+"""
+scalar DateTime
+
+type Profile {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  userId: ID!
+  user: User!
+  email: String!
+  username: String
+  firstName: String
+  lastName: String
+}
+
+type Device {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  fingerprint: String!
+  userDevices: [UserDevice!]!
+}
+
+type UserDevice {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  userId: ID!
+  user: User!
+  deviceId: ID!
+  device: Device!
+}
+
+type User {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  cognitoId: String!
+  lastSignIn: DateTime
+  role: UserRole!
+  profileId: ID
+  profile: Profile
+  profiles: [Profile!]!
+  subscriberId: ID
+  subscriber: Subscriber
+  recentMembershipId: ID
+  recentMembership: Membership
+  memberships: [Membership!]!
+  userDevices: [UserDevice!]!
+  isDeactivated: Boolean!
+}
+
+"""The role of a user"""
+enum UserRole {
+  REGULAR
+  ADMIN
+  SUPER_ADMIN
+}
+
+type Membership {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  userId: ID!
+  user: User!
+  killbillSubscriptionId: String!
+  status: MembershipStatus!
+  since: DateTime!
+  until: DateTime
+  killbillPaymentMethodPluginName: String!
+  killbillPaymentMethodExternalKey: String!
+}
+
+"""The current status of the membership"""
+enum MembershipStatus {
+  ACTIVE
+  GRADE_PERIOD
+  SUSPENDED
+  PENDING_CANCELLATION
+  CANCELLED
+}
+
+type MembershipPreviousStatus {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  membershipId: ID!
+  membership: Membership!
+  status: MembershipStatus!
+  until: DateTime!
+}
+
+type FindAllMembershipPreviousStatuses {
+  result: [MembershipPreviousStatus!]!
+  count: Int!
+}
+
+type FindAllMemberships {
+  result: [Membership!]!
+  count: Int!
+}
+
+type Notification {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  type: NotificationType!
+  userId: ID!
+  user: User!
+  resendId: String!
+}
+
+"""The type of the notification"""
+enum NotificationType {
+  WELCOME
+  WELCOME_BACK
+  GOODBYE
+  PAYMENT_OVERDUE
+  EVICTION
+}
+
+type FindAllNotifications {
+  result: [Notification!]!
+  count: Int!
+}
+
+type FindAllSubscribers {
+  result: [Subscriber!]!
+  count: Int!
+}
+
+type FindAllProfiles {
+  result: [Profile!]!
+  count: Int!
+}
+
+type FindAllUsers {
+  result: [User!]!
+  count: Int!
+}
+
+type FindAllDevices {
+  result: [Device!]!
+  count: Int!
+}
+
+type FindAllUserDevices {
+  result: [UserDevice!]!
+  count: Int!
+}
+
+type Auth {
+  userId: ID!
+  user: User!
+  token: String!
+}
+
+type AdminNote {
+  id: ID!
+  createdAt: DateTime!
+  updatedAt: DateTime!
+  authorId: ID!
+  author: User!
+  text: String!
+  onUserId: ID
+  onUser: User
+  onMembershipId: ID
+  onMembership: Membership
+}
+
+type FindAllAdminNotes {
+  result: [AdminNote!]!
+  count: Int!
+}
+
+type Query {
+  users(window: Window = {skip: 0, take: 25}, includeDeleted: Boolean = false, filter: UserFilter): FindAllUsers!
+  user(id: ID!): User!
+  profiles(window: Window = {skip: 0, take: 25}, includeDeleted: Boolean = false, filter: ProfileFilter): FindAllProfiles!
+  profile(id: ID!): Profile!
+  userDevices(window: Window = {skip: 0, take: 25}, includeDeleted: Boolean = false, filter: UserDeviceFilter): FindAllUserDevices!
+  userDevice(id: ID!): UserDevice!
+  subscribers(window: Window = {skip: 0, take: 25}, includeDeleted: Boolean = false, filter: SubscriberFilter): FindAllSubscribers!
+  subscriber(id: ID!): Subscriber!
+  notifications(window: Window = {skip: 0, take: 25}, includeDeleted: Boolean = false, filter: NotificationFilter): FindAllNotifications!
+  notification(id: ID!): Notification!
+  memberships(window: Window = {skip: 0, take: 25}, includeDeleted: Boolean = false, filter: MembershipFilter): FindAllMemberships!
+  membership(id: ID!): Membership!
+  membershipPreviousStatuses(window: Window = {skip: 0, take: 25}, includeDeleted: Boolean = false, filter: MembershipPreviousStatusFilter): FindAllMembershipPreviousStatuses!
+  membershipPreviousStatus(id: ID!): MembershipPreviousStatus!
+  devices(window: Window = {skip: 0, take: 25}, includeDeleted: Boolean = false, filter: DeviceFilter): FindAllDevices!
+  device(id: ID!): Device!
+  adminNotes(window: Window = {skip: 0, take: 25}, includeDeleted: Boolean = false, filter: AdminNoteFilter): FindAllAdminNotes!
+  adminNote(id: ID!): AdminNote!
+}
+
+input Window {
+  skip: Int! = 0
+  take: Int! = 25
+}
+
+input UserFilter {
+  id: StringValueFilter
+  createdAt: DateFilter
+  updatedAt: DateFilter
+  cognitoId: StringValueFilter
+  lastSignIn: DateFilter
+  role: UserRoleFilterInput
+  profile: StringValueFilter
+  subscriber: StringValueFilter
+  recentMembership: StringValueFilter
+  isDeactivated: BooleanFilter
+}
+
+input StringValueFilter {
+  exact: String
+  oneOf: [String]
+}
+
+input DateFilter {
+  exact: DateTime
+  oneOf: [DateTime!]
+  since: DateTime
+  until: DateTime
+}
+
+input UserRoleFilterInput {
+  exact: UserRole
+  oneOf: [UserRole]
+}
+
+input BooleanFilter {
+  exact: Boolean
+  oneOf: [Boolean!]
+}
+
+input ProfileFilter {
+  id: StringValueFilter
+  createdAt: DateFilter
+  updatedAt: DateFilter
+  user: StringValueFilter
+  isActive: BooleanFilter
+  username: StringFilter
+  firstName: StringFilter
+  lastName: StringFilter
+  email: StringFilter
+}
+
+input StringFilter {
+  exact: String
+  oneOf: [String!]
+  pattern: String
+  ignoreCase: Boolean
+}
+
+input UserDeviceFilter {
+  id: StringValueFilter
+  createdAt: DateFilter
+  updatedAt: DateFilter
+  user: StringValueFilter
+  device: StringValueFilter
+}
+
+input SubscriberFilter {
+  id: StringValueFilter
+  createdAt: DateFilter
+  updatedAt: DateFilter
+  user: StringValueFilter
+  convertkitId: StringFilter
+  email: StringFilter
+  firstName: StringFilter
+  isActive: BooleanFilter
+}
+
+input NotificationFilter {
+  id: StringValueFilter
+  createdAt: DateFilter
+  updatedAt: DateFilter
+  type: NotificationTypeFilterInput
+  user: StringValueFilter
+  resendId: StringFilter
+}
+
+input NotificationTypeFilterInput {
+  exact: NotificationType
+  oneOf: [NotificationType]
+}
+
+input MembershipFilter {
+  id: StringValueFilter
+  createdAt: DateFilter
+  updatedAt: DateFilter
+  user: StringValueFilter
+  killbillSubscriptionId: StringValueFilter
+  status: MembershipStatusFilterInput
+  since: DateFilter
+  killbillPaymentMethodPluginName: StringValueFilter
+  killbillPaymentMethodExternalKey: StringValueFilter
+}
+
+input MembershipStatusFilterInput {
+  exact: MembershipStatus
+  oneOf: [MembershipStatus]
+}
+
+input MembershipPreviousStatusFilter {
+  id: StringValueFilter
+  createdAt: DateFilter
+  updatedAt: DateFilter
+  membership: StringValueFilter
+  status: MembershipStatusFilterInput
+  until: DateFilter
+}
+
+input DeviceFilter {
+  id: StringValueFilter
+  createdAt: DateFilter
+  updatedAt: DateFilter
+  fingerprint: StringFilter
+}
+
+input AdminNoteFilter {
+  id: StringValueFilter
+  createdAt: DateFilter
+  updatedAt: DateFilter
+  author: StringValueFilter
+  text: StringFilter
+  onUser: StringValueFilter
+  onMembership: StringValueFilter
+}
+
+type Mutation {
+  registerAccount(input: RegisterAccountInput!): User!
+  updateAccount(input: UpdateAccountInput!): User!
+  createUser(input: CreateUserInput!): User!
+  updateUser(input: UpdateUserInput!): User!
+  deleteUsers(filter: UserFilter!): DeleteAll!
+  restoreUsers(filter: UserFilter!): RestoreAll!
+  eraseUsers(filter: UserFilter!): EraseAll!
+  createProfile(input: CreateProfileInput!): Profile!
+  updateProfile(input: UpdateProfileInput!): Profile!
+  deleteProfiles(filter: ProfileFilter!): DeleteAll!
+  restoreProfiles(filter: ProfileFilter!): RestoreAll!
+  eraseProfiles(filter: ProfileFilter!): EraseAll!
+  createUserDevice(input: CreateUserDeviceInput!): UserDevice!
+  updateUserDevice(input: UpdateUserDeviceInput!): UserDevice!
+  deleteUserDevices(filter: UserDeviceFilter!): DeleteAll!
+  restoreUserDevices(filter: UserDeviceFilter!): RestoreAll!
+  eraseUserDevices(filter: UserDeviceFilter!): EraseAll!
+  createSubscriber(input: CreateSubscriberInput!): Subscriber!
+  deleteSubscribers(filter: SubscriberFilter!): DeleteAll!
+  restoreSubscribers(filter: SubscriberFilter!): RestoreAll!
+  eraseSubscribers(filter: SubscriberFilter!): EraseAll!
+  createNotification(input: CreateNotificationInput!): Notification!
+  updateNotification(input: UpdateNotificationInput!): Notification!
+  deleteNotifications(filter: NotificationFilter!): DeleteAll!
+  restoreNotifications(filter: NotificationFilter!): RestoreAll!
+  eraseNotifications(filter: NotificationFilter!): EraseAll!
+  createMembership(input: CreateMembershipInput!): Membership!
+  updateMembership(input: UpdateMembershipInput!): Membership!
+  deleteMemberships(filter: MembershipFilter!): DeleteAll!
+  restoreMemberships(filter: MembershipFilter!): RestoreAll!
+  eraseMemberships(filter: MembershipFilter!): EraseAll!
+  registerMembership(input: RegisterMembershipInput!): Membership!
+  syncMembershipStatus(input: SyncMembershipStatusInput!): Membership!
+  createMembershipPreviousStatus(input: CreateMembershipPreviousStatusInput!): MembershipPreviousStatus!
+  updateMembershipPreviousStatus(input: UpdateMembershipPreviousStatusInput!): MembershipPreviousStatus!
+  deleteMembershipPreviousStatuses(filter: MembershipPreviousStatusFilter!): DeleteAll!
+  restoreMembershipPreviousStatuses(filter: MembershipPreviousStatusFilter!): RestoreAll!
+  eraseMembershipPreviousStatuses(filter: MembershipPreviousStatusFilter!): EraseAll!
+  createDevice(input: CreateDeviceInput!): Device!
+  updateDevice(input: UpdateDeviceInput!): Device!
+  deleteDevices(filter: DeviceFilter!): DeleteAll!
+  restoreDevices(filter: DeviceFilter!): RestoreAll!
+  eraseDevices(filter: DeviceFilter!): EraseAll!
+  impersonateUser(input: ImpersonateUserInput!): Auth!
+  exchangeAwsCognitoToken(input: ExchangeAwsCognitoTokenInput): Auth!
+  createAdminNote(input: CreateAdminNoteInput!): AdminNote!
+  updateAdminNote(input: UpdateAdminNoteInput!): AdminNote!
+  deleteAdminNotes(filter: AdminNoteFilter!): DeleteAll!
+  restoreAdminNotes(filter: AdminNoteFilter!): RestoreAll!
+  eraseAdminNotes(filter: AdminNoteFilter!): EraseAll!
+  syncUserAsSubscriber(input: ResyncUserAsSubscriberInput!): User!
+  resubscribeUser(input: ResubscribeUserInput!): User!
+}
+
+input RegisterAccountInput {
+  cognitoId: String!
+  email: String!
+  firstName: String!
+  lastName: String
+  username: String
+}
+
+input UpdateAccountInput {
+  email: String
+  firstName: String
+  lastName: String
+  username: String
+  user: ID!
+}
+
+input CreateUserInput {
+  cognitoId: String!
+  lastSignIn: DateTime
+  role: UserRole!
+  profile: ID
+  subscriber: ID
+  recentMembership: ID
+  isDeactivated: Boolean!
+}
+
+input UpdateUserInput {
+  cognitoId: String
+  lastSignIn: DateTime
+  role: UserRole
+  profile: ID
+  subscriber: ID
+  recentMembership: ID
+  isDeactivated: Boolean
+  id: ID!
+}
+
+input CreateProfileInput {
+  user: ID!
+  isActive: Boolean!
+  email: String!
+  firstName: String!
+  lastName: String
+  username: String
+}
+
+input UpdateProfileInput {
+  user: ID
+  isActive: Boolean
+  email: String
+  firstName: String
+  lastName: String
+  username: String
+  id: ID!
+}
+
+input CreateUserDeviceInput {
+  user: ID!
+  device: ID!
+}
+
+input UpdateUserDeviceInput {
+  user: ID
+  device: ID
+  id: ID!
+}
+
+input CreateSubscriberInput {
+  user: ID!
+  convertkitId: String!
+  email: String!
+  firstName: String!
+  isActive: Boolean!
+}
+
+input CreateNotificationInput {
+  type: NotificationType!
+  user: ID!
+  resendId: String!
+}
+
+input UpdateNotificationInput {
+  type: NotificationType
+  user: ID
+  resendId: String
+  id: ID!
+}
+
+input CreateMembershipInput {
+  user: ID!
+  killbillSubscriptionId: String!
+  status: MembershipStatus!
+  since: DateTime!
+  killbillPaymentMethodPluginName: String!
+  killbillPaymentMethodExternalKey: String!
+}
+
+input UpdateMembershipInput {
+  user: ID
+  killbillSubscriptionId: String
+  status: MembershipStatus
+  since: DateTime
+  killbillPaymentMethodPluginName: String
+  killbillPaymentMethodExternalKey: String
+  id: ID!
+}
+
+input RegisterMembershipInput {
+  user: ID!
+  killbillSubscriptionId: String!
+  status: MembershipStatus!
+  since: DateTime!
+  killbillPaymentMethodPluginName: String!
+  killbillPaymentMethodExternalKey: String!
+}
+
+input SyncMembershipStatusInput {
+  killbillSubscriptionId: String!
+  status: MembershipStatus!
+  timestamp: DateTime
+}
+
+input CreateMembershipPreviousStatusInput {
+  membership: ID!
+  status: MembershipStatus!
+  until: DateTime!
+}
+
+input UpdateMembershipPreviousStatusInput {
+  membership: ID
+  status: MembershipStatus
+  until: DateTime
+  id: ID!
+}
+
+input CreateDeviceInput {
+  fingerprint: String!
+}
+
+input UpdateDeviceInput {
+  fingerprint: String
+  id: ID!
+}
+
+input ImpersonateUserInput {
+  user: ID!
+}
+
+input ExchangeAwsCognitoTokenInput {
+  deviceFingerprint: String
+}
+
+input CreateAdminNoteInput {
+  author: ID!
+  text: String!
+  onUser: ID
+  onMembership: ID
+}
+
+input UpdateAdminNoteInput {
+  author: ID
+  text: String
+  onUser: ID
+  onMembership: ID
+  id: ID!
+}
+
+input ResyncUserAsSubscriberInput {
+  user: ID
+}
+
+input ResubscribeUserInput {
+  user: ID
+}

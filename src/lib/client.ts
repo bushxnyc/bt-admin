@@ -1,0 +1,104 @@
+import "server-only";
+
+import { graphql } from "./gql/btcore/client";
+import { initClient } from "./gql/btcore/client";
+import { BTUser } from "./bt-core.types";
+
+export const GetUser = graphql(/* GraphQL */ `
+  query UserByID($userId: String) {
+    users(filter: { id: { exact: $userId } }) {
+      result {
+        profile {
+          firstName
+          email
+          username
+        }
+        recentMembership {
+          status
+          killbillPaymentMethodExternalKey
+          killbillPaymentMethodPluginName
+        }
+      }
+    }
+  }
+`);
+
+const findUser = graphql(/* GraphQL */ `
+  query FindUser($firstName: String, $lastName: String, $email: String, $username: String) {
+    profiles(
+      window: { take: 10 }
+      filter: {
+        isActive: { exact: true }
+        email: { pattern: $email, ignoreCase: true }
+        firstName: { pattern: $firstName, ignoreCase: true }
+        lastName: { pattern: $lastName, ignoreCase: true }
+        username: { pattern: $username, ignoreCase: true }
+      }
+    ) {
+      count
+      result {
+        id
+        createdAt
+        email
+        firstName
+        lastName
+        username
+        user {
+          id
+          cognitoId
+          lastSignIn
+          cognitoId
+          isDeactivated
+          subscriber {
+            id
+            isActive
+          }
+          recentMembership {
+            id
+            status
+            since
+            killbillSubscriptionId
+            killbillPaymentMethodExternalKey
+            killbillPaymentMethodPluginName
+          }
+          memberships {
+            id
+            status
+            since
+            killbillSubscriptionId
+            killbillPaymentMethodExternalKey
+          }
+          userDevices {
+            id
+          }
+        }
+      }
+    }
+  }
+`);
+
+export async function FindUser({ firstName, lastName, email, username }: { firstName?: string; lastName?: string; email?: string; username?: string }) {
+  const key = process.env.CORE_API_KEY || "";
+  const client = initClient(key);
+  const { data, error } = await client.query(findUser, { firstName, lastName, email, username });
+  if (error) {
+    error.graphQLErrors.map((e) => console.error(e.message));
+    throw new UserNotFoundError(error.graphQLErrors[0].message);
+  }
+  return data || null;
+}
+
+export async function getUser({ userId }: { userId: string }): Promise<BTUser> {
+  const key = process.env.CORE_API_KEY || "";
+  const client = initClient(key);
+  const { data } = await client.query(GetUser, { userId });
+  return data?.users.result[0] || null;
+}
+
+export class UserNotFoundError extends Error {
+  constructor(message: string, public code?: number) {
+    super(message);
+    this.name = "UserNotFound";
+    Object.setPrototypeOf(this, UserNotFoundError.prototype); // Maintain the prototype chain
+  }
+}
