@@ -1,8 +1,10 @@
 import "@/app/globals.css";
 import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
-import Script from "next/script";
+import { ClerkProvider, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
+import { ReactNode, Suspense } from "react";
+import { auth } from "@clerk/nextjs/server";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -12,31 +14,30 @@ export const metadata = {
   generator: "v0.dev",
 };
 
-import { ReactNode, Suspense } from "react";
+export default async function asyncRootLayout({ children }: { children: ReactNode }) {
+  const { userId, redirectToSignIn } = await auth();
 
-export default function RootLayout({ children }: { children: ReactNode }) {
+  if (!userId) return redirectToSignIn();
   return (
-    <html lang="en" suppressHydrationWarning>
-      <head>
-        <Script id="resize-observer-error-handler" strategy="beforeInteractive">
-          {`
-            window.addEventListener('error', function(e) {
-              if (e.message.includes('ResizeObserver') || e.message.includes('ResizeObserver loop')) {
-                e.stopImmediatePropagation();
-                console.warn('ResizeObserver error suppressed');
-                return false;
-              }
-            });
-          `}
-        </Script>
-      </head>
-      <body className={inter.className}>
-        <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
-          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-            <NuqsAdapter>{children}</NuqsAdapter>
-          </ThemeProvider>
-        </Suspense>
-      </body>
-    </html>
+    <ClerkProvider>
+      <html lang="en" suppressHydrationWarning>
+        <body className={inter.className}>
+          <header className="flex justify-end items-center p-4 gap-4 h-16">
+            <SignedOut>
+              <SignInButton />
+              <SignUpButton />
+            </SignedOut>
+            <SignedIn>
+              <UserButton />
+            </SignedIn>
+          </header>
+          <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+              <NuqsAdapter>{children}</NuqsAdapter>
+            </ThemeProvider>
+          </Suspense>
+        </body>
+      </html>
+    </ClerkProvider>
   );
 }
