@@ -5,6 +5,25 @@ export function cn(...inputs: ClassValue[]) {
   return twMerge(clsx(inputs));
 }
 
+export const formatExactDateTime = (dateString: string): string => {
+  if (!dateString) return "Unknown";
+
+  const date = new Date(dateString);
+  if (isNaN(date.getTime())) return "Invalid date";
+
+  // Format to: "May 17, 2025, 3:45:21 PM EDT"
+  return new Intl.DateTimeFormat("en-US", {
+    year: "numeric",
+    month: "long",
+    day: "numeric",
+    hour: "numeric",
+    minute: "numeric",
+    second: "numeric",
+    timeZoneName: "short",
+    timeZone: "America/New_York", // Eastern Time
+  }).format(date);
+};
+
 export // Convert UTC date string to "time since" format in EST
 const formatTimeAgo = (utcDateString: string | null | undefined): string => {
   if (!utcDateString) return "Never";

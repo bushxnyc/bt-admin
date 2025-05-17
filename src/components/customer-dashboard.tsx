@@ -1,10 +1,13 @@
 "use client";
 
-import { useState, useEffect } from "react";
-import { ChevronLeft, ChevronRight, Filter, MoreHorizontal, CheckCircle, AlertCircle, Zap, XCircle } from "lucide-react";
+import { AlertCircle, CheckCircle, ChevronLeft, ChevronRight, Clock, Filter, MoreHorizontal, XCircle, Zap, Copy, Check } from "lucide-react";
+import { useEffect, useState } from "react";
 
-import { Button } from "@/components/ui/button";
+// Add Popover components to imports
+import CustomerDetail from "@/components/customer-detail";
 import { Badge } from "@/components/ui/badge";
+import { Button } from "@/components/ui/button";
+import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
 import {
   DropdownMenu,
   DropdownMenuContent,
@@ -13,11 +16,11 @@ import {
   DropdownMenuSeparator,
   DropdownMenuTrigger,
 } from "@/components/ui/dropdown-menu";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import CustomerDetail from "@/components/customer-detail";
-import { updateCustomer, searchUsers } from "@/lib/actions";
+import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
+import { searchUsers, updateCustomer } from "@/lib/actions";
 import { Customer, MembershipStatus } from "@/lib/types";
-import { formatTimeAgo } from "@/lib/utils";
+import { formatExactDateTime, formatTimeAgo } from "@/lib/utils";
+import { toast } from "sonner";
 
 export default function CustomerDashboard({ username, firstName, lastName, email }: { username: string; firstName: string; lastName: string; email: string }) {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>(null);
@@ -25,6 +28,7 @@ export default function CustomerDashboard({ username, firstName, lastName, email
   const [customers, setCustomers] = useState<Customer[]>([]);
   const [total, setTotal] = useState(0);
   const [loading, setLoading] = useState(true);
+  const [copiedId, setCopiedId] = useState<string | null>(null);
 
   const formatNumber = (num: number): string => {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
@@ -124,6 +128,62 @@ export default function CustomerDashboard({ username, firstName, lastName, email
     }
   };
 
+  const copyToClipboard = (text: string, id: string) => {
+    if (!text) return;
+
+    // Check if navigator.clipboard is supported
+    if (navigator.clipboard) {
+      navigator.clipboard
+        .writeText(text)
+        .then(() => {
+          setCopiedId(id);
+          toast("Copied to clipboard");
+          setTimeout(() => setCopiedId(null), 2000);
+        })
+        .catch((err) => {
+          console.error("Failed to copy text: ", err);
+          // Fall back to alternate method
+          fallbackCopyTextToClipboard(text, id);
+        });
+    } else {
+      // Use fallback for browsers without clipboard API support
+      fallbackCopyTextToClipboard(text, id);
+    }
+  };
+
+  const fallbackCopyTextToClipboard = (text: string, id: string) => {
+    try {
+      // Create temporary textarea element
+      const textArea = document.createElement("textarea");
+      textArea.value = text;
+
+      // Make the textarea out of viewport
+      textArea.style.position = "fixed";
+      textArea.style.left = "-999999px";
+      textArea.style.top = "-999999px";
+      document.body.appendChild(textArea);
+
+      // Focus and select the text
+      textArea.focus();
+      textArea.select();
+
+      // Execute copy command
+      const successful = document.execCommand("copy");
+      document.body.removeChild(textArea);
+
+      if (successful) {
+        setCopiedId(id);
+        toast("Copied to clipboard");
+        setTimeout(() => setCopiedId(null), 2000);
+      } else {
+        toast("Copy failed");
+      }
+    } catch (err) {
+      console.error("Fallback: Failed to copy", err);
+      toast("Copy failed");
+    }
+  };
+
   return (
     <div className="space-y-4">
       {loading ? (
@@ -150,7 +210,22 @@ export default function CustomerDashboard({ username, firstName, lastName, email
                       <span>{customer?.email.toLowerCase()}</span>
                     </div>{" "}
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
-                      <span>Seen: {formatTimeAgo(customer?.user.lastSignIn) || ""}</span>
+                      <Popover>
+                        <PopoverTrigger asChild className="justify-start">
+                          <Button variant="link" className="p-0 h-auto text-sm text-muted-foreground flex items-center gap-1 font-normal">
+                            <Clock className="h-3.5 w-3.5" />
+                            Seen: {formatTimeAgo(customer?.user.lastSignIn) || "Never"}
+                          </Button>
+                        </PopoverTrigger>
+                        <PopoverContent className="w-80 p-4">
+                          <div className="space-y-2">
+                            <h4 className="font-medium">Last Login Details</h4>
+                            <p className="text-sm text-muted-foreground">
+                              {customer?.user.lastSignIn ? formatExactDateTime(customer.user.lastSignIn) : "No login recorded"}
+                            </p>
+                          </div>
+                        </PopoverContent>
+                      </Popover>
                     </div>
                   </div>
                   <div className="flex items-center gap-2">
@@ -189,8 +264,18 @@ export default function CustomerDashboard({ username, firstName, lastName, email
                 <div className="md:hidden mt-4 space-y-3">
                   {/* Row 1: Member ID and Processor */}
                   <div className="grid grid-cols-2 gap-2">
-                    <div className="flex flex-col items-center justify-center text-center p-2 border rounded-md">
-                      <div className="text-xs text-muted-foreground mb-1">Member ID</div>
+                    <div
+                      className="flex flex-col items-center justify-center text-center p-2 border rounded-md cursor-pointer hover:bg-muted/50 transition-colors"
+                      onClick={() => copyToClipboard(customer?.user?.recentMembership?.killbillPaymentMethodExternalKey || "", "EPOCH")}
+                    >
+                      <div className="text-xs text-muted-foreground mb-1 flex items-center">
+                        Member ID
+                        {copiedId === customer?.user?.recentMembership?.killbillPaymentMethodExternalKey ? (
+                          <Check className="h-3 w-3 ml-1 text-green-500" />
+                        ) : (
+                          <Copy className="h-3 w-3 ml-1 text-muted-foreground" />
+                        )}
+                      </div>
                       <div className="font-medium text-sm">{customer?.user.recentMembership?.killbillPaymentMethodExternalKey}</div>
                     </div>
                     <div className="flex flex-col items-center justify-center text-center p-2 border rounded-md">
@@ -220,8 +305,18 @@ export default function CustomerDashboard({ username, firstName, lastName, email
 
                 {/* Desktop layout */}
                 <div className="hidden md:grid md:grid-cols-5 gap-4 mt-4">
-                  <div className="flex flex-col items-center justify-center text-center p-2">
-                    <div className="text-xs text-muted-foreground mb-1">Member ID</div>
+                  <div
+                    className="flex flex-col items-center justify-center text-center p-2 cursor-pointer hover:bg-muted/50 rounded-md transition-colors"
+                    onClick={() => copyToClipboard(customer?.user?.recentMembership?.killbillPaymentMethodExternalKey || "", "EPOCH")}
+                  >
+                    <div className="text-xs text-muted-foreground mb-1 flex items-center">
+                      Member ID
+                      {copiedId === customer?.user?.recentMembership?.killbillPaymentMethodExternalKey ? (
+                        <Check className="h-3 w-3 ml-1 text-green-500" />
+                      ) : (
+                        <Copy className="h-3 w-3 ml-1 text-muted-foreground" />
+                      )}
+                    </div>
                     <div className="font-medium text-sm">{customer?.user.recentMembership?.killbillPaymentMethodExternalKey}</div>
                   </div>
 

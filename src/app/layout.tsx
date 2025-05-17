@@ -12,7 +12,7 @@ export const metadata = {
   generator: "v0.dev",
 };
 
-import { ReactNode } from "react";
+import { ReactNode, Suspense } from "react";
 
 export default function RootLayout({ children }: { children: ReactNode }) {
   return (
@@ -31,9 +31,11 @@ export default function RootLayout({ children }: { children: ReactNode }) {
         </Script>
       </head>
       <body className={inter.className}>
-        <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-          <NuqsAdapter>{children}</NuqsAdapter>
-        </ThemeProvider>
+        <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </ThemeProvider>
+        </Suspense>
       </body>
     </html>
   );
