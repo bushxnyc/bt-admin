@@ -86,10 +86,6 @@ export default function Home() {
                   }}
                 />
               </div>
-
-              {/* Second row - Username and Email (always on same row) */}
-
-              {/* Second row - Username and Email (always on same row) */}
             </div>
           </div>
           <div className="flex justify-end">
