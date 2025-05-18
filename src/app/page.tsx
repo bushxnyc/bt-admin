@@ -43,6 +43,7 @@ export default function Home() {
                   className="bg-[var(--input-bg)]"
                   onChange={(e) => {
                     setEmail(e.target.value);
+                    setPage("1");
                   }}
                 />
               </div>
@@ -56,6 +57,7 @@ export default function Home() {
                   className="bg-[var(--input-bg)]"
                   onChange={(e) => {
                     setUsername(e.target.value);
+                    setPage("1");
                   }}
                 />
               </div>
@@ -70,6 +72,7 @@ export default function Home() {
                   value={firstName}
                   onChange={(e) => {
                     setFirstName(e.target.value);
+                    setPage("1");
                   }}
                 />
               </div>
@@ -83,6 +86,7 @@ export default function Home() {
                   value={lastName}
                   onChange={(e) => {
                     setLastName(e.target.value);
+                    setPage("1");
                   }}
                 />
               </div>
