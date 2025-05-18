@@ -187,7 +187,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                   onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}
                 >
                   <SelectTrigger className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-xl"}>
-                    <SelectValue placeholder="Select subscription status" />
+                    <SelectValue placeholder="NONE" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="ACTIVE">Active</SelectItem>
