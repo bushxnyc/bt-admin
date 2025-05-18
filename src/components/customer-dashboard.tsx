@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, CheckCircle, ChevronLeft, ChevronRight, Clock, Filter, MoreHorizontal, XCircle, Zap, Copy, Check } from "lucide-react";
+import { AlertCircle, Check, CheckCircle, ChevronLeft, ChevronRight, Clock, Copy, MoreHorizontal, XCircle, Zap } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Add Popover components to imports
@@ -192,10 +192,6 @@ export default function CustomerDashboard({ username, firstName, lastName, email
         <>
           <div className="flex justify-between items-center">
             <div className="text-sm text-muted-foreground">Showing {formatNumber(total)} customers</div>
-            <Button variant="outline" size="sm">
-              <Filter className="h-4 w-4 mr-2" />
-              Filter
-            </Button>
           </div>
 
           <div className="w-full gap-3 grid md:grid-cols-2">
