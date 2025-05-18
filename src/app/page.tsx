@@ -27,67 +27,69 @@ export default function Home() {
         <p className="text-muted-foreground">Search, view, and update your streaming service customers</p>
       </div>
 
-      <div className="bg-card border rounded-lg p-4">
+      <div>
         <form className="space-y-4">
-          <div className="grid grid-cols-2 gap-2">
-            {/* First row - First Name and Last Name (always on same row) */}
-            <div className="space-y-2">
-              <Label htmlFor="email">Email</Label>
-              <Input
-                id="email"
-                name="email"
-                placeholder=""
-                value={email}
-                className="bg-[var(--input-bg)]"
-                onChange={(e) => {
-                  setEmail(e.target.value);
-                }}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="username">Username</Label>
-              <Input
-                id="username"
-                name="username"
-                placeholder=""
-                value={username}
-                className="bg-[var(--input-bg)]"
-                onChange={(e) => {
-                  setUsername(e.target.value);
-                }}
-              />
-            </div>
+          <div className="bg-card rounded-lg p-4 border">
+            <div className="grid grid-cols-2 gap-2">
+              {/* First row - First Name and Last Name (always on same row) */}
+              <div className="space-y-2">
+                <Label htmlFor="email">Email</Label>
+                <Input
+                  id="email"
+                  name="email"
+                  placeholder=""
+                  value={email}
+                  className="bg-[var(--input-bg)]"
+                  onChange={(e) => {
+                    setEmail(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="username">Username</Label>
+                <Input
+                  id="username"
+                  name="username"
+                  placeholder=""
+                  value={username}
+                  className="bg-[var(--input-bg)]"
+                  onChange={(e) => {
+                    setUsername(e.target.value);
+                  }}
+                />
+              </div>
 
-            <div className="space-y-2">
-              <Label htmlFor="firstName">First Name</Label>
-              <Input
-                id="firstName"
-                name="firstName"
-                placeholder=""
-                className="bg-[var(--input-bg)]"
-                value={firstName}
-                onChange={(e) => {
-                  setFirstName(e.target.value);
-                }}
-              />
-            </div>
-            <div className="space-y-2">
-              <Label htmlFor="lastName">Last Name</Label>
-              <Input
-                id="lastName"
-                name="lastName"
-                placeholder=""
-                className="bg-[var(--input-bg)]"
-                value={lastName}
-                onChange={(e) => {
-                  setLastName(e.target.value);
-                }}
-              />
-            </div>
+              <div className="space-y-2">
+                <Label htmlFor="firstName">First Name</Label>
+                <Input
+                  id="firstName"
+                  name="firstName"
+                  placeholder=""
+                  className="bg-[var(--input-bg)]"
+                  value={firstName}
+                  onChange={(e) => {
+                    setFirstName(e.target.value);
+                  }}
+                />
+              </div>
+              <div className="space-y-2">
+                <Label htmlFor="lastName">Last Name</Label>
+                <Input
+                  id="lastName"
+                  name="lastName"
+                  placeholder=""
+                  className="bg-[var(--input-bg)]"
+                  value={lastName}
+                  onChange={(e) => {
+                    setLastName(e.target.value);
+                  }}
+                />
+              </div>
 
-            {/* Second row - Username and Email (always on same row) */}
+              {/* Second row - Username and Email (always on same row) */}
 
-            {/* Second row - Username and Email (always on same row) */}
+              {/* Second row - Username and Email (always on same row) */}
+            </div>
           </div>
           <div className="flex justify-end">
             <Button type="submit" className="flex w-full md:w-auto items-center gap-2" onClick={clearForm}>
