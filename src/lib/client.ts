@@ -24,9 +24,9 @@ export const GetUser = graphql(/* GraphQL */ `
 `);
 
 const findUser = graphql(/* GraphQL */ `
-  query FindUser($firstName: String, $lastName: String, $email: String, $username: String) {
+  query FindUser($firstName: String, $lastName: String, $email: String, $username: String, $page: Int) {
     profiles(
-      window: { take: 10 }
+      window: { take: 10, skip: $page }
       filter: {
         isActive: { exact: true }
         email: { pattern: $email, ignoreCase: true }
@@ -78,10 +78,22 @@ const findUser = graphql(/* GraphQL */ `
   }
 `);
 
-export async function FindUser({ firstName, lastName, email, username }: { firstName?: string; lastName?: string; email?: string; username?: string }) {
+export async function FindUser({
+  firstName,
+  lastName,
+  email,
+  username,
+  page,
+}: {
+  firstName?: string;
+  lastName?: string;
+  email?: string;
+  username?: string;
+  page?: number;
+}) {
   const key = process.env.CORE_API_KEY || "";
   const client = initClient(key);
-  const { data, error } = await client.query(findUser, { firstName, lastName, email, username });
+  const { data, error } = await client.query(findUser, { firstName, lastName, email, username, page });
   if (error) {
     error.graphQLErrors.map((e) => console.error(e.message));
     throw new UserNotFoundError(error.graphQLErrors[0].message);

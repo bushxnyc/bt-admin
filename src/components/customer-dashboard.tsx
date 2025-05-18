@@ -22,7 +22,21 @@ import { Customer, MembershipStatus } from "@/lib/types";
 import { formatExactDateTime, formatTimeAgo } from "@/lib/utils";
 import { toast } from "sonner";
 
-export default function CustomerDashboard({ username, firstName, lastName, email }: { username: string; firstName: string; lastName: string; email: string }) {
+export default function CustomerDashboard({
+  username,
+  firstName,
+  lastName,
+  email,
+  page,
+  setPageAction,
+}: {
+  page: string;
+  username: string;
+  firstName: string;
+  lastName: string;
+  email: string;
+  setPageAction: (page: string) => void;
+}) {
   const [selectedCustomer, setSelectedCustomer] = useState<Customer>(null);
   const [isDetailOpen, setIsDetailOpen] = useState(false);
   const [customers, setCustomers] = useState<Customer[]>([]);
@@ -44,6 +58,7 @@ export default function CustomerDashboard({ username, firstName, lastName, email
           firstName,
           lastName,
           email,
+          page: parseInt(page),
         });
         setTotal(total);
         setCustomers(customers || []);
@@ -56,7 +71,7 @@ export default function CustomerDashboard({ username, firstName, lastName, email
     };
 
     fetchCustomers();
-  }, [username, firstName, lastName, email]);
+  }, [username, firstName, lastName, email, page]);
 
   const handleCustomerSelect = (customer: Customer) => {
     setSelectedCustomer(customer);
@@ -197,7 +212,7 @@ export default function CustomerDashboard({ username, firstName, lastName, email
           <div className="w-full gap-3 grid md:grid-cols-2">
             {customers.map((customer) => (
               <div key={customer?.id} className="border rounded-lg p-4 hover:border-primary transition-colors bg-card">
-                <div className="flex flex-col  md:flex-row justify-between md:items-start gap-4">
+                <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
                   <div className="space-y-1">
                     <h3 className="font-medium text-2xl border-b border-white/20 pb-1">
                       {customer?.firstName} {customer?.lastName}
@@ -303,16 +318,25 @@ export default function CustomerDashboard({ username, firstName, lastName, email
           </div>
 
           <div className="flex items-center justify-center space-x-2 py-4 mt-4">
-            <Button variant="outline" size="icon">
+            <Button
+              variant="outline"
+              size="icon"
+              disabled={parseInt(page) == 1}
+              onClick={() => setPageAction(parseInt(page) > 1 ? (parseInt(page) - 1).toString() : page)}
+            >
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="sm" className="w-8">
-              1
+              {page}
             </Button>
-            <Button variant="outline" size="sm" className="w-8">
-              2
-            </Button>
-            <Button variant="outline" size="icon">
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                const newPage = parseInt(page) + 1;
+                setPageAction(newPage.toString());
+              }}
+            >
               <ChevronRight className="h-4 w-4" />
             </Button>
           </div>

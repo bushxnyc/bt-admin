@@ -12,6 +12,7 @@ export default function Home() {
   const [firstName, setFirstName] = useQueryState("firstName", { defaultValue: "" });
   const [lastName, setLastName] = useQueryState("lastName", { defaultValue: "" });
   const [email, setEmail] = useQueryState("email", { defaultValue: "" });
+  const [page, setPage] = useQueryState("page", { defaultValue: "1" });
 
   const clearForm = () => {
     setUsername("");
@@ -100,7 +101,7 @@ export default function Home() {
       </div>
 
       <Suspense fallback={<CustomerListSkeleton />}>
-        <CustomerDashboard username={username} firstName={firstName} lastName={lastName} email={email} />
+        <CustomerDashboard username={username} page={page} setPageAction={setPage} firstName={firstName} lastName={lastName} email={email} />
       </Suspense>
     </main>
   );

@@ -8,6 +8,7 @@ export async function searchUsers(params: {
   firstName?: string;
   lastName?: string;
   email?: string;
+  page?: number;
 }): Promise<{ customers: Customer[] | null; total: number }> {
   try {
     const data = await FindUser(params);
