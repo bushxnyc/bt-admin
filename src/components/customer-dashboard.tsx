@@ -197,14 +197,15 @@ export default function CustomerDashboard({ username, firstName, lastName, email
           <div className="w-full gap-3 grid md:grid-cols-2">
             {customers.map((customer) => (
               <div key={customer?.id} className="border rounded-lg p-4 hover:border-primary transition-colors bg-card">
-                <div className="flex flex-col md:flex-row justify-between md:items-center gap-4">
+                <div className="flex flex-col  md:flex-row justify-between md:items-start gap-4">
                   <div className="space-y-1">
-                    <h3 className="font-medium text-2xl">
+                    <h3 className="font-medium text-2xl border-b border-white/20 pb-1">
                       {customer?.firstName} {customer?.lastName}
                     </h3>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
                       <span>{customer?.email.toLowerCase()}</span>
                     </div>{" "}
+                    <div className="text-sm text-muted-foreground">ID: {customer?.id}</div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
                       <Popover>
                         <PopoverTrigger asChild className="justify-start">
