@@ -269,7 +269,7 @@ export default function CustomerDashboard({ username, firstName, lastName, email
                     </div>
                   </div>
                   {customer?.user?.recentMembership && (
-                    <div className="bg-black mt-3 w-full rounded-md flex p-3 gap-3">
+                    <div className="bg-[#805719] mt-3 w-full rounded-md flex p-3 gap-3">
                       <div className="flex flex-col w-full rounded-md bg-[var(--section-bg)] shadow-md shadow-black/10 items-center justify-start text-center p-2">
                         <div className="text-sm text-muted-foreground mb-1">Membership</div>
                         <div>{getSubscriptionStatusBadge(customer?.user.recentMembership?.status || "")}</div>
