@@ -80,7 +80,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
         <TabsTrigger value="devices">Devices</TabsTrigger>
       </TabsList>
 
-      <div className="mt-4 md:h-[450px] overflow-y-auto">
+      <div className="mt-4 md:h-[450px] h-[400px] overflow-y-auto">
         <TabsContent value="profile" className="space-y-4 h-auto">
           <form onSubmit={handleSubmit}>
             <Card>
