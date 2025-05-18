@@ -57,6 +57,21 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
     }
   };
 
+  const getSubscriptionStatusColor = (status: string) => {
+    switch (status) {
+      case "ACTIVE":
+        return "bg-green-900 text-green-300";
+      case "PENDING_CANCELLATION":
+        return "bg-yellow-900 text-yellow-300";
+      case "SUSPENDED":
+        return "bg-orange-900 text-orange-300";
+      case "CANCELLED":
+        return "bg-red-900 text-red-300";
+      default:
+        return "";
+    }
+  };
+
   return (
     <Tabs defaultValue="profile" className="w-full">
       <TabsList className="grid w-full grid-cols-3">
@@ -148,10 +163,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                       <SelectValue placeholder="Select processor" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="Stripe">Stripe</SelectItem>
-                      <SelectItem value="PayPal">PayPal</SelectItem>
-                      <SelectItem value="Braintree">Braintree</SelectItem>
-                      <SelectItem value="Adyen">Adyen</SelectItem>
+                      <SelectItem value="EPOCH">EPOCH</SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -174,23 +186,20 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                   value={editedCustomer?.user?.recentMembership?.status || ""}
                   onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}
                 >
-                  <SelectTrigger>
+                  <SelectTrigger className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-xl"}>
                     <SelectValue placeholder="Select subscription status" />
                   </SelectTrigger>
                   <SelectContent>
                     <SelectItem value="ACTIVE">Active</SelectItem>
-                    <SelectItem value="TRIAL">Trial</SelectItem>
-                    <SelectItem value="PAST_DUE">Past Due</SelectItem>
+                    <SelectItem value="PENDING_CANCELLATION">Pending Cancel</SelectItem>
+                    <SelectItem value="SUSPENDED">Suspended </SelectItem>
                     <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                    <SelectItem value="SUSPENDED">Suspended</SelectItem>
-                    <SelectItem value="PENDING_CANCELLATION">Pending Cancellation</SelectItem>
                   </SelectContent>
                 </Select>
               </div>
 
               <div className="flex items-center space-x-2 text-sm">
-                <CreditCard className="h-4 w-4 text-muted-foreground" />
-                <span className="text-muted-foreground">Last Payment: </span>
+                <span className="text-muted-foreground">Last Status Change: </span>
                 <span>{formatDate(editedCustomer?.user?.recentMembership?.since || "")}</span>
               </div>
             </CardContent>
