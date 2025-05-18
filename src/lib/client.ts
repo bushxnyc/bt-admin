@@ -93,7 +93,7 @@ export async function FindUser({
 }) {
   const key = process.env.CORE_API_KEY || "";
   const client = initClient(key);
-  const newPage = (page ?? 1) - 1;
+  const newPage = ((page ?? 1) - 1) * 10;
   const { data, error } = await client.query(findUser, { firstName, lastName, email, username, page: newPage });
   if (error) {
     error.graphQLErrors.map((e) => console.error(e.message));
