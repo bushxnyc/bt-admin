@@ -17,6 +17,7 @@ type Membership = {
   status: MembershipStatus;
   isActive: boolean;
   since: string;
+  updatedAt: string;
   killbillSubscriptionId: string;
   killbillPaymentMethodExternalKey: string;
   killbillPaymentMethodPluginName: string;

@@ -57,6 +57,7 @@ const findUser = graphql(/* GraphQL */ `
             id
             status
             since
+            updatedAt
             killbillSubscriptionId
             killbillPaymentMethodExternalKey
             killbillPaymentMethodPluginName

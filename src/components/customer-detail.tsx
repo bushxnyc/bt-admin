@@ -133,7 +133,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
 
                 <div className="flex items-center space-x-2 text-sm">
                   <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Joined: </span>
+                  <span className="text-muted-foreground">Account Created: </span>
                   <span>{formatDate(editedCustomer?.createdAt || "")}</span>
                 </div>
               </CardContent>
@@ -200,7 +200,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
 
               <div className="flex items-center space-x-2 text-sm">
                 <span className="text-muted-foreground">Last Status Change: </span>
-                <span>{formatDate(editedCustomer?.user?.recentMembership?.since || "")}</span>
+                <span>{formatDate(editedCustomer?.user?.recentMembership?.updatedAt || "")}</span>
               </div>
             </CardContent>
           </Card>

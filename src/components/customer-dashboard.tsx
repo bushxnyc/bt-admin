@@ -101,25 +101,25 @@ export default function CustomerDashboard({ username, firstName, lastName, email
     switch (status) {
       case "ACTIVE":
         return (
-          <Badge className="bg-green-900 text-green-500 hover:bg-blue-500/30 rounded-full">
+          <Badge className="bg-green-900 text-green-300 hover:bg-blue-500/30 rounded-full">
             <Zap className="w-3 h-3 mr-1" /> Active
           </Badge>
         );
       case "SUSPENDED":
         return (
-          <Badge className="bg-orange-900 text-orange-500 hover:bg-orange-500/30 rounded-full">
+          <Badge className="bg-orange-900 text-orange-300 hover:bg-orange-500/30 rounded-full">
             <AlertCircle className="w-3 h-3 mr-1" /> Suspended
           </Badge>
         );
       case "CANCELLED":
         return (
-          <Badge className="bg-red-900 text-red-500 hover:bg-gray-500/30 rounded-full">
+          <Badge className="bg-red-900 text-red-300 hover:bg-gray-500/30 rounded-full">
             <XCircle className="w-3 h-3 mr-1" /> Cancelled
           </Badge>
         );
       case "PENDING_CANCELLATION":
         return (
-          <Badge className="bg-yellow-900 text-yellow-500 hover:bg-gray-500/30 rounded-full">
+          <Badge className="bg-yellow-900 text-yellow-300 hover:bg-gray-500/30 rounded-full">
             <XCircle className="w-3 h-3 mr-1" /> Pending Cancellation
           </Badge>
         );
