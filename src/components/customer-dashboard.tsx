@@ -1,6 +1,6 @@
 "use client";
 
-import { AlertCircle, Check, CheckCircle, ChevronLeft, ChevronRight, Clock, Copy, MoreHorizontal, XCircle, Zap } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Clock, Copy, MoreHorizontal } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Add Popover components to imports
@@ -96,15 +96,11 @@ export default function CustomerDashboard({
   const getStatusBadge = (status: boolean) => {
     switch (status) {
       case false:
-        return (
-          <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/30">
-            <CheckCircle className="w-3 h-3 mr-1" /> Active
-          </Badge>
-        );
+        return <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/30">Active</Badge>;
       case true:
         return (
           <Badge variant="destructive" className="bg-red-500/20 text-red-500 hover:bg-red-500/30">
-            <AlertCircle className="w-3 h-3 mr-1" /> Deactivated
+            Deactivated
           </Badge>
         );
       default:
@@ -115,29 +111,13 @@ export default function CustomerDashboard({
   const getSubscriptionStatusBadge = (status: MembershipStatus | "") => {
     switch (status) {
       case "ACTIVE":
-        return (
-          <Badge className="bg-green-900 text-green-300 hover:bg-blue-500/30 rounded-full">
-            <Zap className="w-3 h-3 mr-1" /> Active
-          </Badge>
-        );
+        return <Badge className="bg-green-900 text-green-300 hover:bg-blue-500/30 rounded-full">Active</Badge>;
       case "SUSPENDED":
-        return (
-          <Badge className="bg-orange-900 text-orange-300 hover:bg-orange-500/30 rounded-full">
-            <AlertCircle className="w-3 h-3 mr-1" /> Suspended
-          </Badge>
-        );
+        return <Badge className="bg-orange-900 text-orange-300 hover:bg-orange-500/30 rounded-full">Suspended</Badge>;
       case "CANCELLED":
-        return (
-          <Badge className="bg-red-900 text-red-300 hover:bg-gray-500/30 rounded-full">
-            <XCircle className="w-3 h-3 mr-1" /> Cancelled
-          </Badge>
-        );
+        return <Badge className="bg-red-900 text-red-300 hover:bg-gray-500/30 rounded-full">Cancelled</Badge>;
       case "PENDING_CANCELLATION":
-        return (
-          <Badge className="bg-yellow-900 text-yellow-300 hover:bg-gray-500/30 rounded-full">
-            <XCircle className="w-3 h-3 mr-1" /> Pending Cancellation
-          </Badge>
-        );
+        return <Badge className="bg-yellow-900 text-yellow-300 hover:bg-gray-500/30 rounded-full">Pending Cancel</Badge>;
       default:
         return <div></div>;
     }
