@@ -206,7 +206,30 @@ export default function CustomerDashboard({
       ) : (
         <>
           <div className="flex justify-between items-center">
-            <div className="text-sm text-muted-foreground">Showing {formatNumber(total)} customers</div>
+            <div className="text-sm text-center w-full text-muted-foreground">Showing {formatNumber(total)} customers</div>
+          </div>
+          <div className="flex items-center justify-center space-x-2 mt-4">
+            <Button
+              variant="outline"
+              size="icon"
+              disabled={parseInt(page) == 1}
+              onClick={() => setPageAction(parseInt(page) > 1 ? (parseInt(page) - 1).toString() : page)}
+            >
+              <ChevronLeft className="h-4 w-4" />
+            </Button>
+            <Button variant="outline" size="sm" className="w-8">
+              {page}
+            </Button>
+            <Button
+              variant="outline"
+              size="icon"
+              onClick={() => {
+                const newPage = parseInt(page) + 1;
+                setPageAction(newPage.toString());
+              }}
+            >
+              <ChevronRight className="h-4 w-4" />
+            </Button>
           </div>
 
           <div className="w-full gap-3 grid md:grid-cols-2">
