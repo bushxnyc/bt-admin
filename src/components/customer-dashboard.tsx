@@ -223,7 +223,7 @@ export default function CustomerDashboard({
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
                       <span>{customer?.email.toLowerCase()}</span>
                     </div>{" "}
-                    <div className="text-sm text-muted-foreground">ID: {customer?.id}</div>
+                    <div className="text-sm text-muted-foreground">ID: {customer?.user.id}</div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
                       <Popover>
                         <PopoverTrigger asChild className="justify-start">
