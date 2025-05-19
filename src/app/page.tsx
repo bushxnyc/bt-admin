@@ -19,6 +19,7 @@ export default function Home() {
     setFirstName("");
     setLastName("");
     setEmail("");
+    setPage("1");
   };
 
   return (
