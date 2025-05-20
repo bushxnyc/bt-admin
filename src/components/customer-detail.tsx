@@ -6,6 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
+import { deleteUser } from "@/lib/actions";
 import { Customer } from "@/lib/types";
 import { Calendar as CalendarIcon, CreditCard, Smartphone, User } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
@@ -279,7 +280,26 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
             </Button>
           </>
         ) : (
-          <Button onClick={() => setIsEditing(true)}>Edit Customer</Button>
+          <div className="flex gap-3 flex-row">
+            <Button onClick={() => setIsEditing(true)}>Edit user</Button>
+            <Button
+              className="bg-red-800 hover:bg-red-900"
+              onClick={async () => {
+                if (confirm(`Are you sure you want to delete ${customer?.firstName} ${customer?.lastName}?`)) {
+                  if (customer) {
+                    const respone = await deleteUser(customer.user.id);
+                    if (respone?.success) {
+                      alert(respone.message);
+                    } else {
+                      alert(respone?.message);
+                    }
+                  }
+                }
+              }}
+            >
+              Delete User
+            </Button>
+          </div>
         )}
       </div>
     </Tabs>

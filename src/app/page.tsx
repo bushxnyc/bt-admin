@@ -23,7 +23,7 @@ export default function Home() {
   };
 
   return (
-    <main className="container mx-auto px-4 py-6 space-y-8 min-h-screen bg-background">
+    <main className="container max-w-[1080px] mx-auto px-4 py-6 space-y-8 min-h-screen bg-background">
       <div className="space-y-2">
         <h1 className="text-3xl font-bold tracking-tight">Customer Management</h1>
         <p className="text-muted-foreground">Search, view, and update your streaming service customers</p>

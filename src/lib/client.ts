@@ -4,10 +4,20 @@ import { graphql } from "./gql/btcore/client";
 import { initClient } from "./gql/btcore/client";
 import { BTUser } from "./bt-core.types";
 
-export const GetUser = graphql(/* GraphQL */ `
+export const DeleteUserQuery = graphql(/* GraphQL */ `
+  mutation DeleteAccount($userId: String) {
+    deleteUsers(filter: { id: { exact: $userId } }) {
+      count
+    }
+  }
+`);
+
+export const GetUserQuery = graphql(/* GraphQL */ `
   query UserByID($userId: String) {
     users(filter: { id: { exact: $userId } }) {
       result {
+        id
+        cognitoId
         profile {
           firstName
           email
@@ -23,7 +33,7 @@ export const GetUser = graphql(/* GraphQL */ `
   }
 `);
 
-const findUser = graphql(/* GraphQL */ `
+const FindUserQuery = graphql(/* GraphQL */ `
   query FindUser($firstName: String, $lastName: String, $email: String, $username: String, $page: Int) {
     profiles(
       window: { take: 10, skip: $page }
@@ -94,7 +104,7 @@ export async function FindUser({
   const key = process.env.CORE_API_KEY || "";
   const client = initClient(key);
   const newPage = ((page ?? 1) - 1) * 10;
-  const { data, error } = await client.query(findUser, { firstName, lastName, email, username, page: newPage });
+  const { data, error } = await client.query(FindUserQuery, { firstName, lastName, email, username, page: newPage });
   if (error) {
     error.graphQLErrors.map((e) => console.error(e.message));
     throw new UserNotFoundError(error.graphQLErrors[0].message);
@@ -102,11 +112,25 @@ export async function FindUser({
   return data || null;
 }
 
-export async function getUser({ userId }: { userId: string }): Promise<BTUser> {
+export async function GetUser({ userId }: { userId: string }): Promise<BTUser> {
   const key = process.env.CORE_API_KEY || "";
   const client = initClient(key);
-  const { data } = await client.query(GetUser, { userId });
+  const { data } = await client.query(GetUserQuery, { userId });
   return data?.users.result[0] || null;
+}
+
+export async function DeleteUser({ userId }: { userId: string }) {
+  const key = process.env.CORE_API_KEY || "";
+  const client = initClient(key);
+  const { data, error } = await client.mutation(DeleteUserQuery, { userId });
+  if (error) {
+    error.graphQLErrors.map((e) => console.error(e.message));
+    throw new UserNotFoundError(error.graphQLErrors[0].message);
+  }
+  if (data?.deleteUsers.count === 0) {
+    throw new UserNotFoundError("User not found", 404);
+  }
+  return data;
 }
 
 export class UserNotFoundError extends Error {
