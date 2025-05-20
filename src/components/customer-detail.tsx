@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { deleteUser } from "@/lib/actions";
+import { deleteUser, updateUserEmail } from "@/lib/actions";
 import { Customer } from "@/lib/types";
 import { Calendar as CalendarIcon, CreditCard, Smartphone, User } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
@@ -261,7 +261,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
           <>
             <Button
               variant="outline"
-              onClick={() => {
+              onClick={async () => {
                 setEditedCustomer(customer);
                 setIsEditing(false);
               }}
@@ -270,8 +270,16 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
             </Button>
             <Button
               type="submit"
-              onClick={(e) => {
+              onClick={async (e) => {
                 e.preventDefault();
+                if (customer) {
+                  const respone = await updateUserEmail({ userId: customer.user.id, newEmail: editedCustomer?.email || "" });
+                  if (respone?.success) {
+                    alert(respone.message);
+                  } else {
+                    alert(respone?.message);
+                  }
+                }
                 onUpdate(editedCustomer);
                 setIsEditing(false);
               }}

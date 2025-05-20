@@ -12,6 +12,21 @@ export const DeleteUserQuery = graphql(/* GraphQL */ `
   }
 `);
 
+export const UserUserEmailQuery = graphql(/* GraphQL */ `
+  mutation UpdateAccount($email: String!, $id: ID!) {
+    updateAccount(input: { user: $id, email: $email }) {
+      id
+      cognitoId
+      profile {
+        email
+        firstName
+        lastName
+        username
+      }
+    }
+  }
+`);
+
 export const GetUserQuery = graphql(/* GraphQL */ `
   query UserByID($userId: String) {
     users(filter: { id: { exact: $userId } }) {
@@ -131,6 +146,21 @@ export async function DeleteUser({ userId }: { userId: string }) {
     throw new UserNotFoundError("User not found", 404);
   }
   return data;
+}
+
+export async function UpdateUserEmail({ email, id }: { email: string; id: string }) {
+  const key = process.env.CORE_API_KEY || "";
+  const client = initClient(key);
+  const { data, error } = await client.mutation(UserUserEmailQuery, { email, id });
+  if (error) {
+    error.graphQLErrors.map((e) => console.error(e.message));
+    throw new UserNotFoundError(error.graphQLErrors[0].message);
+  }
+  if (data?.updateAccount) {
+    return { success: true, user: data.updateAccount };
+  } else {
+    return { success: false, message: "User not found" };
+  }
 }
 
 export class UserNotFoundError extends Error {

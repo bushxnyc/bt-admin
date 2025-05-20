@@ -1,8 +1,8 @@
 "use server";
 
-import { DeleteUser, FindUser, GetUser } from "@/lib/client";
+import { DeleteUser, FindUser, GetUser, UpdateUserEmail } from "@/lib/client";
 import { Customer } from "@/lib/types";
-import { deleteCogUser } from "./cognito/CogClient";
+import { deleteCogUser, updateCogUserEmail } from "./cognito/CogClient";
 import { Epoch } from "./epoch";
 import { BTUser } from "./bt-core.types";
 
@@ -37,6 +37,31 @@ export async function updateCustomer(customer: Customer) {
   // Return the updated customer
   return customer;
 }
+
+export const updateUserEmail = async ({ userId, newEmail }: { userId: string; newEmail: string }) => {
+  const coreUser = await GetUser({ userId });
+  try {
+    const result = await updateCogUserEmail({ email: newEmail, userId: coreUser?.cognitoId || "" });
+    if (result?.$metadata.httpStatusCode == 200) {
+      console.log("Updating user email in core: ", userId);
+      const coreReponse = await UpdateUserEmail({ email: newEmail, id: coreUser?.id || "" });
+      if (coreReponse?.success) {
+        return { success: true, message: "User email updated successfully" };
+      } else {
+        return { success: false, message: coreReponse?.message };
+      }
+    } else {
+      return { success: false, message: "Error updating user email" };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error updating user email:", error);
+      return { success: false, message: error.message };
+    }
+    console.error("Error updating user email: ", error);
+    return { success: false, message: "Unknown error occurred" };
+  }
+};
 
 const deleteCoreUser = async (user: BTUser) => {
   try {
