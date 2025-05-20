@@ -73,7 +73,7 @@ export async function deleteUser(customerId: string) {
 
     const result = await deleteCogUser({ userId: user?.cognitoId || "" });
 
-    if (result.$metadata.httpStatusCode !== 200) {
+    if (result.$metadata.httpStatusCode == 200) {
       // Simulate a delay to mimic a database operation
       console.log("Deleting customer with ID:", customerId);
       return await deleteCoreUser(user);
