@@ -39,12 +39,21 @@ export async function updateCustomer(customer: Customer) {
 }
 
 const deleteCoreUser = async (user: BTUser) => {
-  const count = await DeleteUser({ userId: user?.id || "" });
-  if (count?.deleteUsers?.count === 0) {
-    return { success: false, message: "Core User Not Found: " + user?.id };
-  } else {
-    console.log("Deleting customer with ID:", user?.id);
-    return { success: true, message: `${count} Customer deleted successfully` };
+  try {
+    const count = await DeleteUser({ userId: user?.id || "" });
+    if (count?.deleteUsers?.count === 0) {
+      return { success: false, message: "Core User Not Found: " + user?.id };
+    } else {
+      console.log("Deleting core user:", user?.id);
+      return { success: true, message: `${count} Customer deleted successfully` };
+    }
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error core user:", error);
+      return { success: false, message: error.message };
+    }
+    console.error("Error deleting core user: ", error);
+    return { success: false, message: "Unknown error occurred" };
   }
 };
 
@@ -66,8 +75,8 @@ export async function deleteUser(customerId: string) {
 
     if (result.$metadata.httpStatusCode !== 200) {
       // Simulate a delay to mimic a database operation
-      return await deleteCoreUser(user);
       console.log("Deleting customer with ID:", customerId);
+      return await deleteCoreUser(user);
     }
   } catch (error) {
     if (error instanceof Error) {
