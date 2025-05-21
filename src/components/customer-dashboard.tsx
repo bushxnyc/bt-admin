@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronLeft, ChevronRight, Clock, Copy } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Clock, Mail, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Add Popover components to imports
@@ -209,7 +209,7 @@ export default function CustomerDashboard({
               <div key={customer?.id} className="border rounded-lg p-4 hover:border-primary transition-colors bg-card">
                 <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
                   <div className="space-y-1 w-full">
-                    <div className="flex flex-row items-center justify-between pb-1 border-b border-white/20 ">
+                    <div className="flex flex-row items-end justify-between pb-1 border-b border-white/10 ">
                       <h3 className="font-medium text-2xl">
                         {customer?.firstName} {customer?.lastName}
                       </h3>
@@ -228,14 +228,15 @@ export default function CustomerDashboard({
                         </DialogContent>
                       </Dialog>
                     </div>
-                    <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
+                    <div className="flex flex-row items-center sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
+                      <Mail className="h-3.5 w-3.5" />
                       <span>{customer?.email.toLowerCase()}</span>
                     </div>{" "}
                     <div className="text-sm text-muted-foreground">ID: {customer?.user.id}</div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
                       <Popover>
                         <PopoverTrigger asChild className="justify-start">
-                          <Button variant="link" className="p-0 h-auto text-sm text-muted-foreground flex items-center gap-1 font-normal">
+                          <Button variant="link" className="p-0 h-auto text-sm text-muted-foreground flex items-center gap-1 font-normal w-fit">
                             <Clock className="h-3.5 w-3.5" />
                             Seen: {formatTimeAgo(customer?.user.lastSignIn) || "Never"}
                           </Button>
