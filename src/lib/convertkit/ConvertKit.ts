@@ -23,7 +23,6 @@ export class ConvertKit {
   async removeSubscriber(email: string) {
     try {
       const url = `${this.apiUrl}/unsubscribe`;
-      console.log("ConvertKit URL:", url);
       const headers = {
         "Content-Type": "application/json",
         Accept: "",
@@ -37,13 +36,11 @@ export class ConvertKit {
 
       const response = await axios.put(url, data, { headers });
 
-      console.log("ConvertKit response:", response);
-
       return { success: response.status === 204, message: "Subscriber removed successfully" };
     } catch (error) {
       if (axios.isAxiosError(error)) {
         if (axios.isAxiosError(error)) {
-          console.log("ConvertKit response:", error);
+          console.log("ConvertKit Error Response:", error);
           return { success: false, message: error.message };
         }
       }

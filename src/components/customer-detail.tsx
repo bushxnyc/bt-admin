@@ -301,9 +301,9 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
           </>
         ) : (
           <div className="flex gap-3 flex-row">
-            <Button onClick={() => setIsEditing(true)}>Edit user</Button>
+            <Button onClick={() => setIsEditing(true)}>Edit</Button>
             <AlertDialog>
-              <AlertDialogTrigger className="bg-red-800 p-2 rounded-md text-sm">Delete User</AlertDialogTrigger>
+              <AlertDialogTrigger className="bg-red-800 p-2 rounded-md text-sm">Delete</AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
@@ -318,10 +318,8 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                       if (customer) {
                         const respone = await deleteUser(customer.user.id);
                         if (respone?.success) {
-                          console.log(respone.message);
                           alert(respone.message);
                         } else {
-                          console.log(respone?.message);
                           alert(respone?.message);
                         }
                       }

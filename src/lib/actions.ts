@@ -70,7 +70,6 @@ const deleteCoreUser = async (user: BTUser) => {
     if (count?.deleteUsers?.count === 0) {
       return { success: false, message: "Core User Not Found: " + user?.id };
     } else {
-      console.log("Deleting core user:", user?.id);
       return { success: true, message: `${count?.deleteUsers.count.toString()} Customers deleted successfully` };
     }
   } catch (error) {
