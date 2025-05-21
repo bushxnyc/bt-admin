@@ -96,15 +96,15 @@ export default function CustomerDashboard({
   const getStatusBadge = (status: boolean) => {
     switch (status) {
       case false:
-        return <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/30">Active</Badge>;
+        return <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/30">Enabled</Badge>;
       case true:
         return (
           <Badge variant="destructive" className="bg-red-500/20 text-red-500 hover:bg-red-500/30">
-            Deactivated
+            Disabled
           </Badge>
         );
       default:
-        return <Badge variant="secondary">Active</Badge>;
+        return <Badge variant="secondary">Enabled</Badge>;
     }
   };
 
@@ -216,10 +216,26 @@ export default function CustomerDashboard({
             {customers.map((customer) => (
               <div key={customer?.id} className="border rounded-lg p-4 hover:border-primary transition-colors bg-card">
                 <div className="flex flex-col md:flex-row justify-between md:items-start gap-4">
-                  <div className="space-y-1">
-                    <h3 className="font-medium text-2xl border-b border-white/20 pb-1">
-                      {customer?.firstName} {customer?.lastName}
-                    </h3>
+                  <div className="space-y-1 w-full">
+                    <div className="flex flex-row items-center justify-between pb-1 border-b border-white/20 ">
+                      <h3 className="font-medium text-2xl">
+                        {customer?.firstName} {customer?.lastName}
+                      </h3>
+                      <Dialog open={isDetailOpen && selectedCustomer?.id === customer?.id} onOpenChange={setIsDetailOpen}>
+                        <DialogTrigger asChild>
+                          <Button variant="outline" size="sm" onClick={() => handleCustomerSelect(customer)}>
+                            View Details
+                          </Button>
+                        </DialogTrigger>
+                        <DialogContent className="sm:max-w-[600px]">
+                          <DialogHeader>
+                            <DialogTitle>Customer Details</DialogTitle>
+                            <DialogDescription>View and update customer information</DialogDescription>
+                          </DialogHeader>
+                          {selectedCustomer && <CustomerDetail customer={selectedCustomer} onUpdate={handleCustomerUpdate} />}
+                        </DialogContent>
+                      </Dialog>
+                    </div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
                       <span>{customer?.email.toLowerCase()}</span>
                     </div>{" "}
@@ -242,36 +258,6 @@ export default function CustomerDashboard({
                         </PopoverContent>
                       </Popover>
                     </div>
-                  </div>
-                  <div className="flex items-center gap-2">
-                    <Dialog open={isDetailOpen && selectedCustomer?.id === customer?.id} onOpenChange={setIsDetailOpen}>
-                      <DialogTrigger asChild>
-                        <Button variant="outline" size="sm" onClick={() => handleCustomerSelect(customer)}>
-                          View Details
-                        </Button>
-                      </DialogTrigger>
-                      <DialogContent className="sm:max-w-[600px]">
-                        <DialogHeader>
-                          <DialogTitle>Customer Details</DialogTitle>
-                          <DialogDescription>View and update customer information</DialogDescription>
-                        </DialogHeader>
-                        {selectedCustomer && <CustomerDetail customer={selectedCustomer} onUpdate={handleCustomerUpdate} />}
-                      </DialogContent>
-                    </Dialog>
-                    <DropdownMenu>
-                      <DropdownMenuTrigger asChild>
-                        <Button variant="ghost" size="icon">
-                          <MoreHorizontal className="h-4 w-4" />
-                        </Button>
-                      </DropdownMenuTrigger>
-                      <DropdownMenuContent align="end">
-                        <DropdownMenuLabel>Actions</DropdownMenuLabel>
-                        <DropdownMenuItem onClick={() => handleCustomerSelect(customer)}>Edit Customer</DropdownMenuItem>
-                        <DropdownMenuItem>View Billing History</DropdownMenuItem>
-                        <DropdownMenuSeparator />
-                        <DropdownMenuItem className="text-red-500">Suspend Account</DropdownMenuItem>
-                      </DropdownMenuContent>
-                    </DropdownMenu>
                   </div>
                 </div>
 
