@@ -5,6 +5,7 @@ import { Customer } from "@/lib/types";
 import { deleteCogUser, updateCogUserEmail } from "./cognito/CogClient";
 import { Epoch } from "./epoch";
 import { BTUser } from "./bt-core.types";
+import { ConvertKit } from "./convertkit/ConvertKit";
 
 export async function searchUsers(params: {
   username?: string;
@@ -83,9 +84,14 @@ const deleteCoreUser = async (user: BTUser) => {
 };
 
 export async function deleteUser(customerId: string) {
+  console.log("Deleting user:", customerId);
+  // Get CognitoId of User
+  const user = await GetUser({ userId: customerId });
+  const ck = new ConvertKit();
   try {
-    // Get CognitoId of User
-    const user = await GetUser({ userId: customerId });
+    if (user?.subscriber) {
+      await ck.removeSubscriber(user?.profile?.email || "");
+    }
 
     if (user?.recentMembership) {
       const epoch = new Epoch();
@@ -96,11 +102,13 @@ export async function deleteUser(customerId: string) {
       }
     }
 
-    const result = await deleteCogUser({ userId: user?.cognitoId || "" });
+    if (user?.cognitoId) {
+      const result = await deleteCogUser({ userId: user?.cognitoId });
 
-    if (result.$metadata.httpStatusCode == 200) {
-      // Simulate a delay to mimic a database operation
-      return await deleteCoreUser(user);
+      if (result.$metadata.httpStatusCode == 200) {
+        // Simulate a delay to mimic a database operation
+        return await deleteCoreUser(user);
+      }
     }
   } catch (error) {
     if (error instanceof Error) {

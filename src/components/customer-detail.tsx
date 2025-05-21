@@ -11,6 +11,18 @@ import { Customer } from "@/lib/types";
 import { Calendar as CalendarIcon, CreditCard, Smartphone, User } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
 
+import {
+  AlertDialog,
+  AlertDialogAction,
+  AlertDialogCancel,
+  AlertDialogContent,
+  AlertDialogDescription,
+  AlertDialogFooter,
+  AlertDialogHeader,
+  AlertDialogTitle,
+  AlertDialogTrigger,
+} from "@/components/ui/alert-dialog";
+
 export default function CustomerDetail({ customer, onUpdate }: { customer: Customer; onUpdate: (customer: Customer) => void }) {
   const [editedCustomer, setEditedCustomer] = useState<Customer>(customer);
   const [isEditing, setIsEditing] = useState(false);
@@ -290,23 +302,36 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
         ) : (
           <div className="flex gap-3 flex-row">
             <Button onClick={() => setIsEditing(true)}>Edit user</Button>
-            <Button
-              className="bg-red-800 hover:bg-red-900"
-              onClick={async () => {
-                if (confirm(`Are you sure you want to delete ${customer?.firstName} ${customer?.lastName}?`)) {
-                  if (customer) {
-                    const respone = await deleteUser(customer.user.id);
-                    if (respone?.success) {
-                      alert(respone.message);
-                    } else {
-                      alert(respone?.message);
-                    }
-                  }
-                }
-              }}
-            >
-              Delete User
-            </Button>
+            <AlertDialog>
+              <AlertDialogTrigger className="bg-red-800 p-2 rounded-md text-sm">Delete User</AlertDialogTrigger>
+              <AlertDialogContent>
+                <AlertDialogHeader>
+                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                  <AlertDialogDescription>
+                    This will delete {customer?.firstName} {customer?.lastName} from all systems.
+                  </AlertDialogDescription>
+                </AlertDialogHeader>
+                <AlertDialogFooter>
+                  <AlertDialogCancel>Cancel</AlertDialogCancel>
+                  <AlertDialogAction
+                    onClick={async () => {
+                      if (customer) {
+                        const respone = await deleteUser(customer.user.id);
+                        if (respone?.success) {
+                          console.log(respone.message);
+                          alert(respone.message);
+                        } else {
+                          console.log(respone?.message);
+                          alert(respone?.message);
+                        }
+                      }
+                    }}
+                  >
+                    Continue
+                  </AlertDialogAction>
+                </AlertDialogFooter>
+              </AlertDialogContent>
+            </AlertDialog>
           </div>
         )}
       </div>

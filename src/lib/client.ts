@@ -4,7 +4,7 @@ import { graphql } from "./gql/btcore/client";
 import { initClient } from "./gql/btcore/client";
 import { BTUser } from "./bt-core.types";
 
-export const DeleteUserQuery = graphql(/* GraphQL */ `
+const DeleteUserQuery = graphql(/* GraphQL */ `
   mutation DeleteAccount($userId: String) {
     deleteUsers(filter: { id: { exact: $userId } }) {
       count
@@ -12,7 +12,7 @@ export const DeleteUserQuery = graphql(/* GraphQL */ `
   }
 `);
 
-export const UserUserEmailQuery = graphql(/* GraphQL */ `
+const UserUserEmailQuery = graphql(/* GraphQL */ `
   mutation UpdateAccount($email: String!, $id: ID!) {
     updateAccount(input: { user: $id, email: $email }) {
       id
@@ -22,27 +22,6 @@ export const UserUserEmailQuery = graphql(/* GraphQL */ `
         firstName
         lastName
         username
-      }
-    }
-  }
-`);
-
-export const GetUserQuery = graphql(/* GraphQL */ `
-  query UserByID($userId: String) {
-    users(filter: { id: { exact: $userId } }) {
-      result {
-        id
-        cognitoId
-        profile {
-          firstName
-          email
-          username
-        }
-        recentMembership {
-          status
-          killbillPaymentMethodExternalKey
-          killbillPaymentMethodPluginName
-        }
       }
     }
   }
@@ -103,6 +82,29 @@ const FindUserQuery = graphql(/* GraphQL */ `
   }
 `);
 
+const GetUserQuery = graphql(/* GraphQL */ `
+  query UserByID($userId: ID!) {
+    user(id: $userId) {
+      id
+      cognitoId
+      profile {
+        firstName
+        email
+        username
+      }
+      recentMembership {
+        status
+        killbillPaymentMethodExternalKey
+        killbillPaymentMethodPluginName
+      }
+      subscriber {
+        convertkitId
+        isActive
+      }
+    }
+  }
+`);
+
 export async function FindUser({
   firstName,
   lastName,
@@ -128,10 +130,18 @@ export async function FindUser({
 }
 
 export async function GetUser({ userId }: { userId: string }): Promise<BTUser> {
-  const key = process.env.CORE_API_KEY || "";
-  const client = initClient(key);
-  const { data } = await client.query(GetUserQuery, { userId });
-  return data?.users.result[0] || null;
+  try {
+    const key = process.env.CORE_API_KEY || "";
+    const client = initClient(key);
+    const { data } = await client.query(GetUserQuery, { userId });
+    return data?.user || null;
+  } catch (error) {
+    if (error instanceof Error) {
+      console.error("Error fetching user:", error);
+      throw new UserNotFoundError(error.message);
+    }
+    return null;
+  }
 }
 
 export async function DeleteUser({ userId }: { userId: string }) {

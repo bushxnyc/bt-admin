@@ -10,6 +10,8 @@ export type Customer = {
 
 type Subscriber = {
   id: string;
+  convertKitId: string | null;
+  isActive: boolean;
 };
 
 type Membership = {

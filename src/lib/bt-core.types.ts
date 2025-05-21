@@ -1,6 +1,10 @@
 export type BTUser = {
   id: string;
-  cognitoId?: string;
+  cognitoId: string;
+  subscriber: {
+    convertkitId: unknown;
+    isActive: boolean;
+  } | null;
   profile: {
     email: string;
     firstName: string | null;
