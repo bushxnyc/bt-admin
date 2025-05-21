@@ -178,6 +178,9 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     <SelectContent>
                       <SelectItem value="EPOCH">EPOCH</SelectItem>
                     </SelectContent>
+                    <SelectContent>
+                      <SelectItem value="COMP">COMP</SelectItem>
+                    </SelectContent>
                   </Select>
                 </div>
                 <div className="space-y-2">
