@@ -39,13 +39,45 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
   };
 
   const handleSelectChange = (name: string, value: string) => {
-    setEditedCustomer(
-      (prev) =>
-        ({
-          ...prev,
-          [name]: value,
-        } as Customer)
-    );
+    let newValue;
+    if (value === "true") {
+      newValue = true;
+    } else if (value === "false") {
+      newValue = false;
+    } else {
+      newValue = value;
+    }
+
+    // Handle nested properties
+    const nameParts = name.split(".");
+    if (nameParts.length > 1) {
+      setEditedCustomer((prev) => {
+        const updatedPrev = { ...prev };
+        // eslint-disable-next-line @typescript-eslint/no-explicit-any
+        let current: any = updatedPrev;
+
+        // Navigate to the parent object
+        for (let i = 0; i < nameParts.length - 1; i++) {
+          if (!current[nameParts[i]]) {
+            current[nameParts[i]] = {};
+          }
+          current = current[nameParts[i]];
+        }
+
+        // Set the value on the last property
+        current[nameParts[nameParts.length - 1]] = newValue;
+        return updatedPrev as Customer;
+      });
+    } else {
+      // Handle top-level properties as before
+      setEditedCustomer(
+        (prev) =>
+          ({
+            ...prev,
+            [name]: newValue,
+          } as Customer)
+      );
+    }
   };
 
   const handleSubmit = (e: FormEvent<HTMLFormElement>) => {
@@ -90,7 +122,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
       case "active":
         return "bg-green-900 text-green-300";
       case "inactive":
-        return "bg-yellow-900 text-red-300";
+        return "bg-red-900 text-red-300";
     }
   };
 

@@ -87,7 +87,7 @@ export default function CustomerDashboard({
         return <Badge className="bg-green-500/20 text-green-500 hover:bg-green-500/30">Enabled</Badge>;
       case true:
         return (
-          <Badge variant="destructive" className="bg-red-500/20 text-red-500 hover:bg-red-500/30">
+          <Badge variant="destructive" className="bg-red-700 text-red-200 hover:bg-red-500/30">
             Disabled
           </Badge>
         );
