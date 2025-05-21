@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronLeft, ChevronRight, Clock, Copy, MoreHorizontal } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Clock, Copy } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Add Popover components to imports
@@ -8,14 +8,6 @@ import CustomerDetail from "@/components/customer-detail";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
 import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
-import {
-  DropdownMenu,
-  DropdownMenuContent,
-  DropdownMenuItem,
-  DropdownMenuLabel,
-  DropdownMenuSeparator,
-  DropdownMenuTrigger,
-} from "@/components/ui/dropdown-menu";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { searchUsers, updateCustomer } from "@/lib/actions";
 import { Customer, MembershipStatus } from "@/lib/types";
