@@ -1,8 +1,8 @@
 import "server-only";
 
-import { graphql } from "./gql/btcore/client";
-import { initClient } from "./gql/btcore/client";
 import { BTUser } from "./bt-core.types";
+import { graphql, initClient } from "./gql/btcore/client";
+import { Customer } from "./types";
 
 const DeleteUserQuery = graphql(/* GraphQL */ `
   mutation DeleteAccount($userId: String) {
@@ -12,7 +12,7 @@ const DeleteUserQuery = graphql(/* GraphQL */ `
   }
 `);
 
-const UserUserEmailQuery = graphql(/* GraphQL */ `
+const UpdateUserEmailQuery = graphql(/* GraphQL */ `
   mutation UpdateAccount($email: String!, $id: ID!) {
     updateAccount(input: { user: $id, email: $email }) {
       id
@@ -105,6 +105,22 @@ const GetUserQuery = graphql(/* GraphQL */ `
   }
 `);
 
+const UpdateProfileQuery = graphql(/* GraphQL */ `
+  mutation UpdateAccount($user: ID!, $firstName: String, $lastName: String, $username: String) {
+    updateAccount(input: { user: $user, firstName: $firstName, lastName: $lastName, username: $username }) {
+      id
+    }
+  }
+`);
+
+const UpdateUserQuery = graphql(/* GraphQL */ `
+  mutation UpdateUser($id: ID!, $active: Boolean) {
+    updateUser(input: { id: $id, isDeactivated: $active }) {
+      id
+    }
+  }
+`);
+
 export async function FindUser({
   firstName,
   lastName,
@@ -161,7 +177,7 @@ export async function DeleteUser({ userId }: { userId: string }) {
 export async function UpdateUserEmail({ email, id }: { email: string; id: string }) {
   const key = process.env.CORE_API_KEY || "";
   const client = initClient(key);
-  const { data, error } = await client.mutation(UserUserEmailQuery, { email, id });
+  const { data, error } = await client.mutation(UpdateUserEmailQuery, { email, id });
   if (error) {
     error.graphQLErrors.map((e) => console.error(e.message));
     throw new UserNotFoundError(error.graphQLErrors[0].message);
@@ -179,4 +195,40 @@ export class UserNotFoundError extends Error {
     this.name = "UserNotFound";
     Object.setPrototypeOf(this, UserNotFoundError.prototype); // Maintain the prototype chain
   }
+}
+
+export async function UpdateProfile(profile: Customer) {
+  const key = process.env.CORE_API_KEY || "";
+  const client = initClient(key);
+  const { data, error } = await client.mutation(UpdateProfileQuery, {
+    user: profile?.user.id || "",
+    firstName: profile?.firstName,
+    lastName: profile?.lastName,
+    username: profile?.username,
+  });
+
+  if (error) {
+    console.error("Error updating profile:", error);
+    return { success: false, message: error.message };
+  }
+  if (data?.updateAccount.id !== undefined) {
+    return { success: true, message: "User Successfully Updated!" };
+  }
+}
+
+export async function UpdateUser(profile: Customer) {
+  const key = process.env.CORE_API_KEY || "";
+  const client = initClient(key);
+  const { data, error } = await client.mutation(UpdateUserQuery, {
+    id: profile?.user.id || "",
+    active: profile?.user.isDeactivated,
+  });
+  if (error) {
+    console.error("Error updating user:", error);
+    return { success: false, message: error.message };
+  }
+  if (data?.updateUser.id !== undefined) {
+    return { success: true, message: "User Successfully Updated!" };
+  }
+  return { success: false, message: "User not found" };
 }

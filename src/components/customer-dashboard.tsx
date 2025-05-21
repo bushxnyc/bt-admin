@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronLeft, ChevronRight, Clock, Mail, Copy } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Clock, Copy, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Add Popover components to imports
@@ -71,18 +71,14 @@ export default function CustomerDashboard({
   };
 
   const handleCustomerUpdate = async (updatedCustomer: Customer) => {
-    try {
-      // In a real app, this would update the database
-      await updateCustomer(updatedCustomer);
+    // In a real app, this would update the database
+    const updateResponse = await updateCustomer(updatedCustomer);
 
-      // Close the dialog
-      setIsDetailOpen(false);
+    // Close the dialog
+    setIsDetailOpen(false);
 
-      // Show success message (in a real app)
-      console.log("Customer updated successfully");
-    } catch (error) {
-      console.error("Failed to update customer", error);
-    }
+    alert(updateResponse);
+    location.reload();
   };
 
   const getStatusBadge = (status: boolean) => {

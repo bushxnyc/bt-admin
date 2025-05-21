@@ -1,6 +1,6 @@
 "use server";
 
-import { DeleteUser, FindUser, GetUser, UpdateUserEmail } from "@/lib/client";
+import { DeleteUser, FindUser, GetUser, UpdateProfile, UpdateUser, UpdateUserEmail } from "@/lib/client";
 import { Customer } from "@/lib/types";
 import { deleteCogUser, updateCogUserEmail } from "./cognito/CogClient";
 import { Epoch } from "./epoch";
@@ -29,11 +29,15 @@ export async function searchUsers(params: {
 // In a real application, this would connect to your database
 
 export async function updateCustomer(customer: Customer) {
-  // Simulate a delay to mimic a database operation
-  await new Promise((resolve) => setTimeout(resolve, 500));
+  const profileResponse = await UpdateProfile(customer);
+  const userResponse = await UpdateUser(customer);
 
-  // In a real app, you would update the database here
-  console.log("Updating customer:", customer);
+  if (profileResponse?.success && userResponse?.success) {
+    return "Customer updated successfully";
+  } else {
+    console.error("Error updating customer:", profileResponse?.message || userResponse?.message);
+    return "Customer update failed";
+  }
 
   // Return the updated customer
   return customer;

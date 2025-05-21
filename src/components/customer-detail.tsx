@@ -85,6 +85,15 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
     }
   };
 
+  const getAccountStatusColor = (status: string) => {
+    switch (status) {
+      case "active":
+        return "bg-green-900 text-green-300";
+      case "inactive":
+        return "bg-yellow-900 text-red-300";
+    }
+  };
+
   return (
     <Tabs defaultValue="profile" className="w-full">
       <TabsList className="grid w-full grid-cols-3">
@@ -134,12 +143,18 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     value={editedCustomer?.user?.isDeactivated ? "inactive" : "active"}
                     onValueChange={(value) => handleSelectChange("user.isDeactivated", value === "inactive" ? "true" : "false")}
                   >
-                    <SelectTrigger>
+                    <SelectTrigger
+                      className={getAccountStatusColor(editedCustomer?.user?.isDeactivated ? "inactive" : "active") + " text-center uppercase text-xl"}
+                    >
                       <SelectValue placeholder="Select status" />
                     </SelectTrigger>
                     <SelectContent>
-                      <SelectItem value="active">Active</SelectItem>
-                      <SelectItem value="inactive">Inactive</SelectItem>
+                      <SelectItem value="active" className="text-center">
+                        Enabled
+                      </SelectItem>
+                      <SelectItem value="inactive" className="text-center">
+                        Disabled
+                      </SelectItem>
                     </SelectContent>
                   </Select>
                 </div>
@@ -287,8 +302,8 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
               type="submit"
               onClick={async (e) => {
                 e.preventDefault();
-                if (customer) {
-                  const respone = await updateUserEmail({ userId: customer.user.id, newEmail: editedCustomer?.email || "" });
+                if (customer?.email !== editedCustomer?.email) {
+                  const respone = await updateUserEmail({ userId: customer?.user.id || "", newEmail: editedCustomer?.email || "" });
                   if (respone?.success) {
                     alert(respone.message);
                   } else {
