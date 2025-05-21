@@ -195,6 +195,7 @@ export default function CustomerDashboard({
             <Button
               variant="outline"
               size="icon"
+              disabled={customers.length === 0 || total <= parseInt(page) * 10}
               onClick={() => {
                 const newPage = parseInt(page) + 1;
                 setPageAction(newPage.toString());
@@ -314,6 +315,7 @@ export default function CustomerDashboard({
             <Button
               variant="outline"
               size="icon"
+              disabled={customers.length === 0 || total <= parseInt(page) * 10}
               onClick={() => {
                 const newPage = parseInt(page) + 1;
                 setPageAction(newPage.toString());
