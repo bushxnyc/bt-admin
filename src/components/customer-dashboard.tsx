@@ -77,7 +77,7 @@ export default function CustomerDashboard({
     // Close the dialog
     setIsDetailOpen(false);
 
-    alert(updateResponse);
+    toast(updateResponse?.toString());
     location.reload();
   };
 

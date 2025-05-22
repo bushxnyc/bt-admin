@@ -22,6 +22,7 @@ import {
   AlertDialogTitle,
   AlertDialogTrigger,
 } from "@/components/ui/alert-dialog";
+import { toast } from "sonner";
 
 export default function CustomerDetail({ customer, onUpdate }: { customer: Customer; onUpdate: (customer: Customer) => void }) {
   const [editedCustomer, setEditedCustomer] = useState<Customer>(customer);
@@ -337,9 +338,9 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                 if (customer?.email !== editedCustomer?.email) {
                   const respone = await updateUserEmail({ userId: customer?.user.id || "", newEmail: editedCustomer?.email || "" });
                   if (respone?.success) {
-                    alert(respone.message);
+                    toast(respone.message);
                   } else {
-                    alert(respone?.message);
+                    toast(respone?.message);
                   }
                 }
                 onUpdate(editedCustomer);
@@ -368,9 +369,9 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                       if (customer) {
                         const respone = await deleteUser(customer.user.id);
                         if (respone?.success) {
-                          alert(respone.message);
+                          toast(respone.message);
                         } else {
-                          alert(respone?.message);
+                          toast(respone?.message);
                         }
                       }
                     }}

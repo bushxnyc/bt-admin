@@ -1,10 +1,11 @@
 import "@/app/globals.css";
-import { Inter } from "next/font/google";
 import { ThemeProvider } from "@/components/theme-provider";
+import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { auth } from "@clerk/nextjs/server";
+import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { ReactNode, Suspense } from "react";
-import { auth } from "@clerk/nextjs/server";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -36,6 +37,7 @@ export default async function asyncRootLayout({ children }: { children: ReactNod
               <NuqsAdapter>{children}</NuqsAdapter>
             </ThemeProvider>
           </Suspense>
+          <Toaster />
         </body>
       </html>
     </ClerkProvider>
