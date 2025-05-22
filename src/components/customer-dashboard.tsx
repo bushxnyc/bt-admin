@@ -78,9 +78,10 @@ export default function CustomerDashboard({
     setIsDetailOpen(false);
 
     toast(updateResponse?.toString(), {
-      onDismiss: () => {
+      onAutoClose: () => {
         location.reload();
       },
+      duration: 4000,
     });
   };
 
