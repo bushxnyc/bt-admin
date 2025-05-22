@@ -77,8 +77,11 @@ export default function CustomerDashboard({
     // Close the dialog
     setIsDetailOpen(false);
 
-    toast(updateResponse?.toString());
-    location.reload();
+    toast(updateResponse?.toString(), {
+      onDismiss: () => {
+        location.reload();
+      },
+    });
   };
 
   const getStatusBadge = (status: boolean) => {
