@@ -147,7 +147,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                 <CardDescription>View and update the customer&apos;s personal details</CardDescription>
               </CardHeader>
               <CardContent className="space-y-4">
-                <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+                <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name</Label>
                     <Input id="firstName" name="firstName" value={editedCustomer?.firstName || ""} onChange={handleChange} disabled={!isEditing} />
@@ -160,12 +160,12 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
-                    <Label htmlFor="username">Username</Label>
-                    <Input id="username" name="username" value={editedCustomer?.username || ""} onChange={handleChange} disabled={!isEditing} />
-                  </div>
-                  <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
                     <Input id="email" name="email" type="email" value={editedCustomer?.email} onChange={handleChange} disabled={!isEditing} />
+                  </div>
+                  <div className="space-y-2">
+                    <Label htmlFor="username">Username</Label>
+                    <Input id="username" name="username" value={editedCustomer?.username || ""} onChange={handleChange} disabled={!isEditing} />
                   </div>
                 </div>
 
