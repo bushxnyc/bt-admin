@@ -272,10 +272,10 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                   <Input
                     id="memberId"
                     name="user.recentMembership.killbillPaymentMethodExternalKey"
-                    value="2312312313"
+                    value={editedCustomer?.user?.recentMembership?.killbillPaymentMethodExternalKey || ""}
                     onChange={handleChange}
                     disabled={!isEditing}
-                    className=""
+                    className="text-sm"
                   />
                 </div>
               </div>
