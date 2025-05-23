@@ -279,7 +279,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                   <AlertDialog>
                     <AlertDialogTrigger asChild>
                       <Button
-                        disabled={!["ACTIVE", "SUSPENDED"].includes(customer?.user?.recentMembership?.status || "DISABLED")}
+                        disabled={!["ACTIVE", "SUSPENDED"].includes(customer?.user?.recentMembership?.status || "DISABLED") || !isEditing}
                         variant="ghost"
                         className="bg-red-800 text-white text-lg p-1 w-full uppercase"
                       >
