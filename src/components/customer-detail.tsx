@@ -230,8 +230,8 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     value={editedCustomer?.user?.recentMembership?.killbillPaymentMethodPluginName || ""}
                     onValueChange={(value) => handleSelectChange("user.recentMembership.killbillPaymentMethodPluginName", value)}
                   >
-                    <SelectTrigger>
-                      <SelectValue placeholder="Select processor" />
+                    <SelectTrigger className="disabled:opacity-50 uppercase text-lg">
+                      <SelectValue placeholder="None" />
                     </SelectTrigger>
                     <SelectContent>
                       <SelectItem value="EPOCH">EPOCH</SelectItem>
@@ -249,6 +249,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     value={editedCustomer?.user?.recentMembership?.killbillPaymentMethodExternalKey || ""}
                     onChange={handleChange}
                     disabled={!isEditing}
+                    className="text-lg"
                   />
                 </div>
               </div>
@@ -260,7 +261,9 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     value={editedCustomer?.user?.recentMembership?.status || ""}
                     onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}
                   >
-                    <SelectTrigger className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-lg"}>
+                    <SelectTrigger
+                      className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-lg disabled:opacity-55"}
+                    >
                       <SelectValue placeholder="NONE" />
                     </SelectTrigger>
                     <SelectContent>
