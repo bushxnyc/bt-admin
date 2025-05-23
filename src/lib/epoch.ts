@@ -28,9 +28,9 @@ export class Epoch {
 
       switch (value) {
         case "Success":
-          return { success: true, message: "SUCCESS" };
+          return { success: true, message: "Membership Cancelled" };
         case "NMYALREADYCANCELLED":
-          return { success: true, message: "SUCCESS" };
+          return { success: true, message: "Memebrship Already Cancelled" };
         default:
           return { success: false, message: "FALED" };
       }

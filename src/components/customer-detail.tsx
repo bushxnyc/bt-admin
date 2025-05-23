@@ -6,7 +6,7 @@ import { Input } from "@/components/ui/input";
 import { Label } from "@/components/ui/label";
 import { Select, SelectContent, SelectItem, SelectTrigger, SelectValue } from "@/components/ui/select";
 import { Tabs, TabsContent, TabsList, TabsTrigger } from "@/components/ui/tabs";
-import { deleteUser, updateUserEmail } from "@/lib/actions";
+import { cancelMembership, deleteUser, updateUserEmail } from "@/lib/actions";
 import { Customer } from "@/lib/types";
 import { Calendar as CalendarIcon, CreditCard, Smartphone, User } from "lucide-react";
 import { ChangeEvent, FormEvent, useState } from "react";
@@ -212,7 +212,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
               <CardDescription>Manage the customer&apos;s subscription information</CardDescription>
             </CardHeader>
             <CardContent className="space-y-4">
-              <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
+              <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="processor">Processor</Label>
                   <Select
@@ -242,26 +242,53 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                   />
                 </div>
               </div>
-
-              <div className="space-y-2">
-                <Label htmlFor="subscriptionStatus">Subscription Status</Label>
-                <Select
-                  disabled={!isEditing}
-                  value={editedCustomer?.user?.recentMembership?.status || ""}
-                  onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}
-                >
-                  <SelectTrigger className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-xl"}>
-                    <SelectValue placeholder="NONE" />
-                  </SelectTrigger>
-                  <SelectContent>
-                    <SelectItem value="ACTIVE">Active</SelectItem>
-                    <SelectItem value="PENDING_CANCELLATION">Pending Cancel</SelectItem>
-                    <SelectItem value="SUSPENDED">Suspended </SelectItem>
-                    <SelectItem value="CANCELLED">Cancelled</SelectItem>
-                  </SelectContent>
-                </Select>
+              <div className="grid grid-cols-2 gap-4">
+                <div className="space-y-2">
+                  <Label htmlFor="subscriptionStatus">Status</Label>
+                  <Select
+                    disabled={!isEditing}
+                    value={editedCustomer?.user?.recentMembership?.status || ""}
+                    onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}
+                  >
+                    <SelectTrigger className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-xl"}>
+                      <SelectValue placeholder="NONE" />
+                    </SelectTrigger>
+                    <SelectContent>
+                      <SelectItem value="ACTIVE">Active</SelectItem>
+                      <SelectItem value="PENDING_CANCELLATION">Pending Cancel</SelectItem>
+                      <SelectItem value="SUSPENDED">Suspended </SelectItem>
+                      <SelectItem value="CANCELLED">Cancelled</SelectItem>
+                    </SelectContent>
+                  </Select>
+                </div>
+                <div className="gap-2 flex flex-col space-y-2 pt-1">
+                  <Label>Action</Label>
+                  <AlertDialog>
+                    <AlertDialogTrigger className="bg-red-800 text-xl uppercase p-1 hover:bg-red-800/50 rounded-md">Cancel</AlertDialogTrigger>
+                    <AlertDialogContent>
+                      <AlertDialogHeader>
+                        <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                        <AlertDialogDescription>This will cancel the Users Membership.</AlertDialogDescription>
+                      </AlertDialogHeader>
+                      <AlertDialogFooter>
+                        <AlertDialogCancel>Cancel</AlertDialogCancel>
+                        <AlertDialogAction
+                          onClick={async () => {
+                            const response = await cancelMembership({ customerId: customer?.user.id || "" });
+                            if (response?.success) {
+                              toast(response.message);
+                            } else {
+                              toast(response?.message);
+                            }
+                          }}
+                        >
+                          Continue
+                        </AlertDialogAction>
+                      </AlertDialogFooter>
+                    </AlertDialogContent>
+                  </AlertDialog>
+                </div>
               </div>
-
               <div className="flex items-center space-x-2 text-sm">
                 <span className="text-muted-foreground">Last Status Change: </span>
                 <span>{formatDate(editedCustomer?.user?.recentMembership?.updatedAt || "")}</span>

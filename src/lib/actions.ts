@@ -86,6 +86,12 @@ const deleteCoreUser = async (user: BTUser) => {
   }
 };
 
+export const cancelMembership = async ({ customerId }: { customerId: string }) => {
+  const user = await GetUser({ userId: customerId });
+  const epoch = new Epoch();
+  return await epoch.cancelEpoch(user?.recentMembership?.killbillPaymentMethodExternalKey || "");
+};
+
 export async function deleteUser(customerId: string) {
   console.log("Deleting user:", customerId);
   // Get CognitoId of User
@@ -96,9 +102,9 @@ export async function deleteUser(customerId: string) {
       await ck.removeSubscriber(user?.profile?.email || "");
     }
 
+    // Check if the user has a recent membership
     if (user?.recentMembership) {
-      const epoch = new Epoch();
-      const epochReponse = await epoch.cancelEpoch(user?.recentMembership?.killbillPaymentMethodExternalKey || "");
+      const epochReponse = await cancelMembership({ customerId });
       if (!epochReponse?.success) {
         console.error("Error cancelling Epoch subscription:", epochReponse?.message);
         return { success: false, message: epochReponse?.message };
