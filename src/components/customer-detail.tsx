@@ -169,27 +169,37 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                   </div>
                 </div>
 
-                <div className="space-y-2">
-                  <Label htmlFor="status">Account Status</Label>
-                  <Select
-                    disabled={!isEditing}
-                    value={editedCustomer?.user?.isDeactivated ? "inactive" : "active"}
-                    onValueChange={(value) => handleSelectChange("user.isDeactivated", value === "inactive" ? "true" : "false")}
-                  >
-                    <SelectTrigger
-                      className={getAccountStatusColor(editedCustomer?.user?.isDeactivated ? "inactive" : "active") + " text-center uppercase text-xl"}
+                <div className="gap-4 flex justify-center flex-row items-center">
+                  <div className="space-y-2 flex flex-col w-full">
+                    <Label htmlFor="status">Account Status</Label>
+                    <Select
+                      disabled={!isEditing}
+                      value={editedCustomer?.user?.isDeactivated ? "inactive" : "active"}
+                      onValueChange={(value) => handleSelectChange("user.isDeactivated", value === "inactive" ? "true" : "false")}
                     >
-                      <SelectValue placeholder="Select status" />
-                    </SelectTrigger>
-                    <SelectContent>
-                      <SelectItem value="active" className="text-center">
-                        Enabled
-                      </SelectItem>
-                      <SelectItem value="inactive" className="text-center">
-                        Disabled
-                      </SelectItem>
-                    </SelectContent>
-                  </Select>
+                      <SelectTrigger
+                        className={getAccountStatusColor(editedCustomer?.user?.isDeactivated ? "inactive" : "active") + " text-center uppercase text-xl"}
+                      >
+                        <SelectValue placeholder="Select status" />
+                      </SelectTrigger>
+                      <SelectContent>
+                        <SelectItem value="active" className="text-center">
+                          Enabled
+                        </SelectItem>
+                        <SelectItem value="inactive" className="text-center">
+                          Disabled
+                        </SelectItem>
+                      </SelectContent>
+                    </Select>
+                  </div>
+                  <div className="space-y-2 flex flex-col w-full">
+                    <Label htmlFor="status">Subscriber</Label>
+                    {customer?.user?.subscriber?.isActive ? (
+                      <div className="ml-1 text-center rounded-sm bg-green-900 text-green-300 text-xl p-1">TRUE</div>
+                    ) : (
+                      <div className="ml-1 text-center rounded-sm bg-red-900 text-red-300 text-xl p-1">FALSE</div>
+                    )}
+                  </div>
                 </div>
 
                 <div className="flex items-center space-x-2 text-sm">

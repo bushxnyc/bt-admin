@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronLeft, ChevronRight, Clock, Copy, Mail } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Clock, Copy, X, Mail } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Add Popover components to imports
@@ -229,10 +229,11 @@ export default function CustomerDashboard({
                         </DialogContent>
                       </Dialog>
                     </div>
-                    <div className="flex flex-row items-center sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
-                      <Mail className="h-3.5 w-3.5" />
+                    <div className="flex flex-row items-center sm:flex-row sm:items-center gap-1 text-sm text-muted-foreground">
+                      <Mail className="h-4 w-4" />
                       <span>{customer?.email.toLowerCase()}</span>
-                    </div>{" "}
+                      {customer?.user.subscriber?.isActive ? <Check className="h-4 w-4 ml-1 text-green-500" /> : <X className="h-4 w-4 ml-1 text-red-500" />}
+                    </div>
                     <div className="text-sm text-muted-foreground">ID: {customer?.user.id}</div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
                       <Popover>
