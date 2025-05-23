@@ -178,26 +178,24 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                       onValueChange={(value) => handleSelectChange("user.isDeactivated", value === "inactive" ? "true" : "false")}
                     >
                       <SelectTrigger
-                        className={getAccountStatusColor(editedCustomer?.user?.isDeactivated ? "inactive" : "active") + " text-center uppercase text-xl"}
+                        className={
+                          getAccountStatusColor(editedCustomer?.user?.isDeactivated ? "inactive" : "active") + " disabled:opacity-50 uppercase text-xl"
+                        }
                       >
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="active" className="text-center">
-                          Enabled
-                        </SelectItem>
-                        <SelectItem value="inactive" className="text-center">
-                          Disabled
-                        </SelectItem>
+                        <SelectItem value="active">Enabled</SelectItem>
+                        <SelectItem value="inactive">Disabled</SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2 flex flex-col w-full">
                     <Label htmlFor="status">Subscriber</Label>
                     {customer?.user?.subscriber?.isActive ? (
-                      <div className="ml-1 text-center rounded-sm bg-green-900 text-green-300 text-xl p-1">TRUE</div>
+                      <div className="ml-1 text-center rounded-sm bg-green-900 text-green-300 opacity-50 text-xl p-1">TRUE</div>
                     ) : (
-                      <div className="ml-1 text-center rounded-sm bg-red-900 text-red-300 text-xl p-1">FALSE</div>
+                      <div className="ml-1 text-center rounded-sm bg-red-900 text-red-300 opacity-50 text-xl p-1">FALSE</div>
                     )}
                   </div>
                 </div>
@@ -262,7 +260,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}
                   >
                     <SelectTrigger
-                      className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-lg disabled:opacity-55"}
+                      className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-lg disabled:opacity-50"}
                     >
                       <SelectValue placeholder="NONE" />
                     </SelectTrigger>
@@ -281,7 +279,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                       <Button
                         disabled={!["ACTIVE", "SUSPENDED"].includes(customer?.user?.recentMembership?.status || "DISABLED") || !isEditing}
                         variant="ghost"
-                        className="bg-red-800 text-white text-lg p-1 w-full uppercase"
+                        className="bg-red-800 text-white text-lg font-light p-1 mt-0 w-full uppercase"
                       >
                         Cancel
                       </Button>
