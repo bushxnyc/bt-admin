@@ -178,9 +178,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                       onValueChange={(value) => handleSelectChange("user.isDeactivated", value === "inactive" ? "true" : "false")}
                     >
                       <SelectTrigger
-                        className={
-                          getAccountStatusColor(editedCustomer?.user?.isDeactivated ? "inactive" : "active") + " disabled:opacity-50 uppercase text-xl"
-                        }
+                        className={getAccountStatusColor(editedCustomer?.user?.isDeactivated ? "inactive" : "active") + " disabled:opacity-50 uppercase"}
                       >
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
@@ -193,9 +191,9 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                   <div className="space-y-2 flex flex-col w-full">
                     <Label htmlFor="status">Subscriber</Label>
                     {customer?.user?.subscriber?.isActive ? (
-                      <div className="ml-1 text-center rounded-sm bg-green-900 text-green-300 opacity-50 text-xl p-1">TRUE</div>
+                      <div className="ml-1 text-center rounded-sm bg-green-900 text-green-300 opacity-50 p-1">TRUE</div>
                     ) : (
-                      <div className="ml-1 text-center rounded-sm bg-red-900 text-red-300 opacity-50 text-xl p-1">FALSE</div>
+                      <div className="ml-1 text-center rounded-sm bg-red-900 text-red-300 opacity-50 p-1">FALSE</div>
                     )}
                   </div>
                 </div>
@@ -205,6 +203,36 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                   <span className="text-muted-foreground">Account Created: </span>
                   <span>{formatDate(editedCustomer?.createdAt || "")}</span>
                 </div>
+                <AlertDialog>
+                  <AlertDialogTrigger asChild disabled={!isEditing}>
+                    <Button className="bg-red-800 hover:bg-red-800/80 p-2 rounded-md uppercase">Delete User</Button>
+                  </AlertDialogTrigger>
+                  <AlertDialogContent>
+                    <AlertDialogHeader>
+                      <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
+                      <AlertDialogDescription>
+                        This will delete {customer?.firstName} {customer?.lastName} from all systems.
+                      </AlertDialogDescription>
+                    </AlertDialogHeader>
+                    <AlertDialogFooter>
+                      <AlertDialogCancel>Cancel</AlertDialogCancel>
+                      <AlertDialogAction
+                        onClick={async () => {
+                          if (customer) {
+                            const respone = await deleteUser(customer.user.id);
+                            if (respone?.success) {
+                              toast(respone.message);
+                            } else {
+                              toast(respone?.message);
+                            }
+                          }
+                        }}
+                      >
+                        Continue
+                      </AlertDialogAction>
+                    </AlertDialogFooter>
+                  </AlertDialogContent>
+                </AlertDialog>
               </CardContent>
             </Card>
           </form>
@@ -228,7 +256,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     value={editedCustomer?.user?.recentMembership?.killbillPaymentMethodPluginName || ""}
                     onValueChange={(value) => handleSelectChange("user.recentMembership.killbillPaymentMethodPluginName", value)}
                   >
-                    <SelectTrigger className="disabled:opacity-50 uppercase text-lg">
+                    <SelectTrigger className="disabled:opacity-50 uppercase ">
                       <SelectValue placeholder="None" />
                     </SelectTrigger>
                     <SelectContent>
@@ -247,7 +275,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     value={editedCustomer?.user?.recentMembership?.killbillPaymentMethodExternalKey || ""}
                     onChange={handleChange}
                     disabled={!isEditing}
-                    className="text-lg"
+                    className=""
                   />
                 </div>
               </div>
@@ -260,7 +288,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}
                   >
                     <SelectTrigger
-                      className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-lg disabled:opacity-50"}
+                      className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase  disabled:opacity-50"}
                     >
                       <SelectValue placeholder="NONE" />
                     </SelectTrigger>
@@ -279,7 +307,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                       <Button
                         disabled={!["ACTIVE", "SUSPENDED"].includes(customer?.user?.recentMembership?.status || "DISABLED") || !isEditing}
                         variant="ghost"
-                        className="bg-red-800 text-white text-lg font-light p-1 mt-0 w-full uppercase"
+                        className="bg-red-800 text-white font-light p-1 mt-0 w-full uppercase"
                       >
                         Cancel
                       </Button>
@@ -401,36 +429,6 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
             <Button className="w-full text-lg" onClick={() => setIsEditing(true)}>
               Edit
             </Button>
-            <AlertDialog>
-              <AlertDialogTrigger asChild>
-                <Button className="bg-red-800 hover:bg-red-800/80 p-2 rounded-md w-full text-lg">Delete</Button>
-              </AlertDialogTrigger>
-              <AlertDialogContent>
-                <AlertDialogHeader>
-                  <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
-                  <AlertDialogDescription>
-                    This will delete {customer?.firstName} {customer?.lastName} from all systems.
-                  </AlertDialogDescription>
-                </AlertDialogHeader>
-                <AlertDialogFooter>
-                  <AlertDialogCancel>Cancel</AlertDialogCancel>
-                  <AlertDialogAction
-                    onClick={async () => {
-                      if (customer) {
-                        const respone = await deleteUser(customer.user.id);
-                        if (respone?.success) {
-                          toast(respone.message);
-                        } else {
-                          toast(respone?.message);
-                        }
-                      }
-                    }}
-                  >
-                    Continue
-                  </AlertDialogAction>
-                </AlertDialogFooter>
-              </AlertDialogContent>
-            </AlertDialog>
           </div>
         )}
       </div>
