@@ -278,7 +278,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
                         <AlertDialogDescription>This will cancel the Users Membership.</AlertDialogDescription>
                       </AlertDialogHeader>
-                      <AlertDialogFooter>
+                      <AlertDialogFooter className="flex fex-row">
                         <AlertDialogCancel>Cancel</AlertDialogCancel>
                         <AlertDialogAction
                           onClick={async () => {
