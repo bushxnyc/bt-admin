@@ -391,7 +391,9 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
               Edit
             </Button>
             <AlertDialog>
-              <AlertDialogTrigger className="bg-red-800 p-2 rounded-md w-full text-lg">Delete</AlertDialogTrigger>
+              <AlertDialogTrigger asChild>
+                <Button className="bg-red-800 hover:bg-red-800/80 p-2 rounded-md w-full text-lg">Delete</Button>
+              </AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
