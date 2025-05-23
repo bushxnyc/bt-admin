@@ -250,7 +250,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     value={editedCustomer?.user?.recentMembership?.status || ""}
                     onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}
                   >
-                    <SelectTrigger className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-xl"}>
+                    <SelectTrigger className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase text-lg"}>
                       <SelectValue placeholder="NONE" />
                     </SelectTrigger>
                     <SelectContent>
@@ -264,7 +264,15 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                 <div className="gap-2 flex flex-col space-y-2 pt-1">
                   <Label>Action</Label>
                   <AlertDialog>
-                    <AlertDialogTrigger className="bg-red-800 text-xl uppercase p-1 hover:bg-red-800/50 rounded-md">Cancel</AlertDialogTrigger>
+                    <AlertDialogTrigger asChild>
+                      <Button
+                        disabled={!["ACTIVE", "SUSPENDED"].includes(customer?.user?.recentMembership?.status || "DISABLED")}
+                        variant="ghost"
+                        className="bg-red-800 text-white text-lg p-1 w-full uppercase"
+                      >
+                        Cancel
+                      </Button>
+                    </AlertDialogTrigger>
                     <AlertDialogContent>
                       <AlertDialogHeader>
                         <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
