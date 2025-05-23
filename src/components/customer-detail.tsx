@@ -386,10 +386,12 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
             </Button>
           </>
         ) : (
-          <div className="flex gap-3 flex-row">
-            <Button onClick={() => setIsEditing(true)}>Edit</Button>
+          <div className="flex gap-3 flex-row w-full">
+            <Button className="w-full text-lg" onClick={() => setIsEditing(true)}>
+              Edit
+            </Button>
             <AlertDialog>
-              <AlertDialogTrigger className="bg-red-800 p-2 rounded-md text-sm">Delete</AlertDialogTrigger>
+              <AlertDialogTrigger className="bg-red-800 p-2 rounded-md w-full text-lg">Delete</AlertDialogTrigger>
               <AlertDialogContent>
                 <AlertDialogHeader>
                   <AlertDialogTitle>Are you absolutely sure?</AlertDialogTitle>
