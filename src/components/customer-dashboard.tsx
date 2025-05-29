@@ -1,6 +1,6 @@
 "use client";
 
-import { Check, ChevronLeft, ChevronRight, Clock, Copy, X, Mail } from "lucide-react";
+import { Check, ChevronLeft, ChevronRight, Clock, Copy, Mail, UserSquare, X } from "lucide-react";
 import { useEffect, useState } from "react";
 
 // Add Popover components to imports
@@ -235,6 +235,10 @@ export default function CustomerDashboard({
                       {customer?.user.subscriber?.isActive ? <Check className="h-4 w-4 ml-1 text-green-500" /> : <X className="h-4 w-4 ml-1 text-red-500" />}
                     </div>
                     <div className="text-sm text-muted-foreground">ID: {customer?.user.id}</div>
+                    <div></div>
+                    <div className="text-sm flex flex-row w-full text-muted-foreground items-center">
+                      <UserSquare className="h-3.5 w-3.5 mr-2" /> {customer?.username}
+                    </div>
                     <div className="flex flex-col sm:flex-row sm:items-center gap-1 sm:gap-3 text-sm text-muted-foreground">
                       <Popover>
                         <PopoverTrigger asChild className="justify-start">
