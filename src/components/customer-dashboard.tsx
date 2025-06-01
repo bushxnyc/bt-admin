@@ -229,7 +229,10 @@ export default function CustomerDashboard({
                         </DialogContent>
                       </Dialog>
                     </div>
-                    <div className="flex flex-row items-center sm:flex-row sm:items-center gap-1 text-sm text-muted-foreground">
+                    <div
+                      className="flex flex-row items-center sm:flex-row sm:items-center gap-1 text-sm text-muted-foreground"
+                      onClick={() => copyToClipboard(customer?.email.toLowerCase() || "", "Email")}
+                    >
                       <Mail className="h-4 w-4" />
                       <span>{customer?.email.toLowerCase()}</span>
                       {customer?.user.subscriber?.isActive ? <Check className="h-4 w-4 ml-1 text-green-500" /> : <X className="h-4 w-4 ml-1 text-red-500" />}
