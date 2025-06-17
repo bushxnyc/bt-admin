@@ -71,10 +71,10 @@ export const updateUserEmail = async ({ userId, newEmail }: { userId: string; ne
 const deleteCoreUser = async (user: BTUser) => {
   try {
     const count = await DeleteUser({ userId: user?.id || "" });
-    if (count?.deleteUsers?.count === 0) {
+    if (count?.eraseUsers?.count === 0) {
       return { success: false, message: "Core User Not Found: " + user?.id };
     } else {
-      return { success: true, message: `${count?.deleteUsers.count.toString()} Customers deleted successfully` };
+      return { success: true, message: `${count?.eraseUsers.count.toString()} Customers deleted successfully` };
     }
   } catch (error) {
     if (error instanceof Error) {

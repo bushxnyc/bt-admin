@@ -9,6 +9,24 @@ const DeleteUserQuery = graphql(/* GraphQL */ `
     deleteUsers(filter: { id: { exact: $userId } }) {
       count
     }
+    eraseSubscribers(filter: { user: { exact: $userId } }) {
+      count
+    }
+    eraseMemberships(filter: { user: { exact: $userId } }) {
+      count
+    }
+    eraseProfiles(filter: { user: { exact: $userId } }) {
+      count
+    }
+    eraseUserDevices(filter: { user: { exact: $userId } }) {
+      count
+    }
+    eraseNotifications(filter: { user: { exact: $userId } }) {
+      count
+    }
+    eraseUsers(filter: { id: { exact: $userId } }) {
+      count
+    }
   }
 `);
 
