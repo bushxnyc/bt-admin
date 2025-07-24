@@ -203,7 +203,9 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     <span className="text-muted-foreground">Account Created: </span>
                     <span>{formatDate(editedCustomer?.createdAt || "")}</span>
                   </div>
-                  <span className=" text-white font-light py-1 px-2 rounded-sm bg-green-800">{customer?.ageVerifiedAt && "Age Verified"}</span>
+                  {customer?.ageVerifiedAt && (
+                    <span className=" text-white font-light py-1 px-2 rounded-sm bg-green-800">{customer?.ageVerifiedAt && "Age Verified"}</span>
+                  )}
                 </div>
                 <AlertDialog>
                   <AlertDialogTrigger asChild disabled={!isEditing}>
