@@ -236,6 +236,7 @@ export default function CustomerDashboard({
                       <Mail className="h-4 w-4" />
                       <span>{customer?.email.toLowerCase()}</span>
                       {customer?.user.subscriber?.isActive ? <Check className="h-4 w-4 ml-1 text-green-500" /> : <X className="h-4 w-4 ml-1 text-red-500" />}
+                      <span className="text-xs text-white font-light p-0 px-2 rounded-md bg-green-800">{customer?.ageVerifiedAt && "Age Verified"}</span>
                     </div>
                     <div className="text-sm text-muted-foreground">ID: {customer?.user.id}</div>
                     <div></div>

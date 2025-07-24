@@ -33,6 +33,7 @@ type Profile {
   updatedAt: DateTime!
   userId: ID!
   user: User!
+  ageVerifiedAt: DateTime
   email: String!
   username: String
   firstName: String
@@ -270,6 +271,7 @@ input ProfileFilter {
   firstName: StringFilter
   lastName: StringFilter
   email: StringFilter
+  ageVerifiedAt: DateFilter
 }
 
 input StringFilter {
@@ -423,6 +425,7 @@ input UpdateAccountInput {
   firstName: String
   lastName: String
   username: String
+  ageVerifiedAt: DateTime
   user: ID!
 }
 
@@ -454,6 +457,7 @@ input CreateProfileInput {
   firstName: String!
   lastName: String
   username: String
+  ageVerifiedAt: DateTime
 }
 
 input UpdateProfileInput {
@@ -463,6 +467,7 @@ input UpdateProfileInput {
   firstName: String
   lastName: String
   username: String
+  ageVerifiedAt: DateTime
   id: ID!
 }
 

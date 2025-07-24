@@ -5,6 +5,7 @@ export type Customer = {
   firstName: string | null;
   lastName: string | null;
   username: string | null;
+  ageVerifiedAt: string | null;
   user: User;
 } | null;
 

@@ -197,11 +197,13 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     )}
                   </div>
                 </div>
-
-                <div className="flex items-center space-x-2 text-sm">
-                  <CalendarIcon className="h-4 w-4 text-muted-foreground" />
-                  <span className="text-muted-foreground">Account Created: </span>
-                  <span>{formatDate(editedCustomer?.createdAt || "")}</span>
+                <div className="flex flex-row gap-6 item-center">
+                  <div className="flex items-center space-x-2 text-sm">
+                    <CalendarIcon className="h-4 w-4 text-muted-foreground" />
+                    <span className="text-muted-foreground">Account Created: </span>
+                    <span>{formatDate(editedCustomer?.createdAt || "")}</span>
+                  </div>
+                  <span className=" text-white font-light py-1 px-2 rounded-sm bg-green-800">{customer?.ageVerifiedAt && "Age Verified"}</span>
                 </div>
                 <AlertDialog>
                   <AlertDialogTrigger asChild disabled={!isEditing}>

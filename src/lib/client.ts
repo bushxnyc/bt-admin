@@ -65,6 +65,7 @@ const FindUserQuery = graphql(/* GraphQL */ `
         firstName
         lastName
         username
+        ageVerifiedAt
         user {
           id
           cognitoId
@@ -109,6 +110,7 @@ const GetUserQuery = graphql(/* GraphQL */ `
         firstName
         email
         username
+        ageVerifiedAt
       }
       recentMembership {
         status

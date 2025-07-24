@@ -22,8 +22,8 @@
         "schemas": [
           {
             "name": "btcore",
-            "schema": "./lib/gql/btcore.graphql",
-            "tadaOutputLocation": "./lib/gql/btcore-env.d.ts"
+            "schema": "./src/lib/gql/btcore.graphql",
+            "tadaOutputLocation": "./src/lib/gql/btcore-env.d.ts"
           }
         ]
       }
