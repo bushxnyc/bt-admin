@@ -2,7 +2,6 @@ import "@/app/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
 import { ClerkProvider, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
-import { auth } from "@clerk/nextjs/server";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { RegisterSW } from "./register-sw";
@@ -33,10 +32,7 @@ export const viewport = {
   themeColor: "#0b0b0f",
 } as const;
 
-export default async function asyncRootLayout({ children }: { children: ReactNode }) {
-  const { userId, redirectToSignIn } = await auth();
-
-  if (!userId) return redirectToSignIn();
+export default function asyncRootLayout({ children }: { children: ReactNode }) {
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
