@@ -1,11 +1,11 @@
 import "@/app/globals.css";
 import { ThemeProvider } from "@/components/theme-provider";
 import { Toaster } from "@/components/ui/sonner";
-import { ClerkProvider, SignInButton, SignUpButton, SignedIn, SignedOut, UserButton } from "@clerk/nextjs";
+import { ClerkProvider } from "@clerk/nextjs";
 import { Inter } from "next/font/google";
 import { NuqsAdapter } from "nuqs/adapters/next/app";
 import { RegisterSW } from "./register-sw";
-import { ReactNode, Suspense } from "react";
+import { ReactNode } from "react";
 
 const inter = Inter({ subsets: ["latin"] });
 
@@ -32,25 +32,14 @@ export const viewport = {
   themeColor: "#0b0b0f",
 } as const;
 
-export default function asyncRootLayout({ children }: { children: ReactNode }) {
+export default function RootLayout({ children }: { children: ReactNode }) {
   return (
     <ClerkProvider>
       <html lang="en" suppressHydrationWarning>
         <body className={inter.className}>
-          <header className="flex justify-end items-center p-4 gap-4 h-16">
-            <SignedOut>
-              <SignInButton />
-              <SignUpButton />
-            </SignedOut>
-            <SignedIn>
-              <UserButton />
-            </SignedIn>
-          </header>
-          <Suspense fallback={<div className="flex items-center justify-center h-screen">Loading...</div>}>
-            <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
-              <NuqsAdapter>{children}</NuqsAdapter>
-            </ThemeProvider>
-          </Suspense>
+          <ThemeProvider attribute="class" defaultTheme="dark" enableSystem={false}>
+            <NuqsAdapter>{children}</NuqsAdapter>
+          </ThemeProvider>
           <Toaster />
           <RegisterSW />
         </body>

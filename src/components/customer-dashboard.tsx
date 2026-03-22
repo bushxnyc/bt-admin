@@ -65,6 +65,22 @@ export default function CustomerDashboard({
     fetchCustomers();
   }, [username, firstName, lastName, email, page]);
 
+  const handleViewPosthog = async (customer: Customer) => {
+    if (!customer?.email) return;
+    try {
+      const res = await fetch(`/api/posthog?email=${encodeURIComponent(customer.email)}`);
+      if (!res.ok) {
+        const { error } = await res.json();
+        toast(error || "Person not found in PostHog");
+        return;
+      }
+      const { url } = await res.json();
+      window.open(url, "_blank");
+    } catch {
+      toast("Failed to look up PostHog person");
+    }
+  };
+
   const handleCustomerSelect = (customer: Customer) => {
     setSelectedCustomer(customer);
     setIsDetailOpen(true);
@@ -214,20 +230,25 @@ export default function CustomerDashboard({
                       <h3 className="font-medium text-2xl">
                         {customer?.firstName} {customer?.lastName}
                       </h3>
-                      <Dialog open={isDetailOpen && selectedCustomer?.id === customer?.id} onOpenChange={setIsDetailOpen}>
-                        <DialogTrigger asChild>
-                          <Button variant="outline" size="sm" onClick={() => handleCustomerSelect(customer)}>
-                            View Details
-                          </Button>
-                        </DialogTrigger>
-                        <DialogContent className="sm:max-w-[600px]">
-                          <DialogHeader>
-                            <DialogTitle>Customer Details</DialogTitle>
-                            <DialogDescription>View and update customer information</DialogDescription>
-                          </DialogHeader>
-                          {selectedCustomer && <CustomerDetail customer={selectedCustomer} onUpdate={handleCustomerUpdate} />}
-                        </DialogContent>
-                      </Dialog>
+                      <div className="flex gap-2">
+                        <Button variant="outline" size="sm" onClick={() => handleViewPosthog(customer)}>
+                          View Posthog
+                        </Button>
+                        <Dialog open={isDetailOpen && selectedCustomer?.id === customer?.id} onOpenChange={setIsDetailOpen}>
+                          <DialogTrigger asChild>
+                            <Button variant="outline" size="sm" onClick={() => handleCustomerSelect(customer)}>
+                              View Details
+                            </Button>
+                          </DialogTrigger>
+                          <DialogContent className="sm:max-w-[600px]">
+                            <DialogHeader>
+                              <DialogTitle>Customer Details</DialogTitle>
+                              <DialogDescription>View and update customer information</DialogDescription>
+                            </DialogHeader>
+                            {selectedCustomer && <CustomerDetail customer={selectedCustomer} onUpdate={handleCustomerUpdate} />}
+                          </DialogContent>
+                        </Dialog>
+                      </div>
                     </div>
                     <div
                       className="flex flex-row items-center sm:flex-row sm:items-center gap-1 text-sm text-muted-foreground"
