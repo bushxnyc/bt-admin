@@ -67,16 +67,22 @@ export default function CustomerDashboard({
 
   const handleViewPosthog = async (customer: Customer) => {
     if (!customer?.email) return;
+    // Open immediately inside the user gesture so Safari iOS doesn't block the popup
+    const newTab = window.open("", "_blank");
     try {
       const res = await fetch(`/api/posthog?email=${encodeURIComponent(customer.email)}`);
       if (!res.ok) {
         const { error } = await res.json();
+        newTab?.close();
         toast(error || "Person not found in PostHog");
         return;
       }
       const { url } = await res.json();
-      window.open(url, "_blank");
+      if (newTab) {
+        newTab.location.href = url;
+      }
     } catch {
+      newTab?.close();
       toast("Failed to look up PostHog person");
     }
   };
