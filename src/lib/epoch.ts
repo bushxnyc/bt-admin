@@ -16,7 +16,10 @@ export class Epoch {
     const url = "https://epoch.com/services/customer_search?" + queryParams + "&epoch_digest=" + epoch_digest;
 
     try {
-      const response = await fetch(url);
+      const controller = new AbortController();
+      const timeout = setTimeout(() => controller.abort(), 30000);
+      const response = await fetch(url, { signal: controller.signal });
+      clearTimeout(timeout);
 
       if (!response.ok) {
         throw new Error("Cancellation Call to Epoch Failed");
