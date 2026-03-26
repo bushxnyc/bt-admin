@@ -7,7 +7,7 @@ import { useEffect, useState } from "react";
 import CustomerDetail from "@/components/customer-detail";
 import { Badge } from "@/components/ui/badge";
 import { Button } from "@/components/ui/button";
-import { Dialog, DialogContent, DialogDescription, DialogHeader, DialogTitle, DialogTrigger } from "@/components/ui/dialog";
+import { Drawer, DrawerContent, DrawerDescription, DrawerHeader, DrawerTitle, DrawerTrigger } from "@/components/ui/drawer";
 import { Popover, PopoverContent, PopoverTrigger } from "@/components/ui/popover";
 import { searchUsers, updateCustomer } from "@/lib/actions";
 import { Customer, MembershipStatus } from "@/lib/types";
@@ -238,22 +238,24 @@ export default function CustomerDashboard({
                       </h3>
                       <div className="flex gap-2">
                         <Button variant="outline" size="sm" onClick={() => handleViewPosthog(customer)}>
-                          View Posthog
+                          Posthog
                         </Button>
-                        <Dialog open={isDetailOpen && selectedCustomer?.id === customer?.id} onOpenChange={setIsDetailOpen}>
-                          <DialogTrigger asChild>
+                        <Drawer open={isDetailOpen && selectedCustomer?.id === customer?.id} onOpenChange={setIsDetailOpen}>
+                          <DrawerTrigger asChild>
                             <Button variant="outline" size="sm" onClick={() => handleCustomerSelect(customer)}>
-                              View Details
+                              Details
                             </Button>
-                          </DialogTrigger>
-                          <DialogContent className="sm:max-w-[600px]">
-                            <DialogHeader>
-                              <DialogTitle>Customer Details</DialogTitle>
-                              <DialogDescription>View and update customer information</DialogDescription>
-                            </DialogHeader>
-                            {selectedCustomer && <CustomerDetail customer={selectedCustomer} onUpdate={handleCustomerUpdate} />}
-                          </DialogContent>
-                        </Dialog>
+                          </DrawerTrigger>
+                          <DrawerContent className="max-h-[90vh] max-w-[1080px] mx-auto">
+                            <DrawerHeader>
+                              <DrawerTitle>Customer Details</DrawerTitle>
+                              <DrawerDescription>View and update customer information</DrawerDescription>
+                            </DrawerHeader>
+                            <div className="overflow-y-auto px-4 pb-8">
+                              {selectedCustomer && <CustomerDetail customer={selectedCustomer} onUpdate={handleCustomerUpdate} />}
+                            </div>
+                          </DrawerContent>
+                        </Drawer>
                       </div>
                     </div>
                     <div

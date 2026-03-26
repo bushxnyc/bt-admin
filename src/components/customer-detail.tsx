@@ -35,7 +35,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
         ({
           ...prev,
           [name]: value,
-        } as Customer)
+        }) as Customer,
     );
   };
 
@@ -76,7 +76,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
           ({
             ...prev,
             [name]: newValue,
-          } as Customer)
+          }) as Customer,
       );
     }
   };
@@ -135,8 +135,8 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
         <TabsTrigger value="devices">Devices</TabsTrigger>
       </TabsList>
 
-      <div className="mt-4 md:h-[450px] h-[400px] overflow-y-auto">
-        <TabsContent value="profile" className="space-y-4 h-auto">
+      <div className="mt-4 overflow-y-auto grid">
+        <TabsContent forceMount value="profile" className="space-y-4 [grid-area:1/1] data-[state=inactive]:invisible data-[state=inactive]:pointer-events-none">
           <form onSubmit={handleSubmit}>
             <Card>
               <CardHeader>
@@ -150,22 +150,22 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                 <div className="grid grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="firstName">First Name</Label>
-                    <Input id="firstName" name="firstName" value={editedCustomer?.firstName || ""} onChange={handleChange} disabled={!isEditing} />
+                    <Input id="firstName" name="firstName" value={editedCustomer?.firstName || ""} onChange={handleChange} disabled={!isEditing} className="h-12" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="lastName">Last Name</Label>
-                    <Input id="lastName" name="lastName" value={editedCustomer?.lastName || ""} onChange={handleChange} disabled={!isEditing} />
+                    <Input id="lastName" name="lastName" value={editedCustomer?.lastName || ""} onChange={handleChange} disabled={!isEditing} className="h-12" />
                   </div>
                 </div>
 
                 <div className="grid grid-cols-1 md:grid-cols-2 gap-4">
                   <div className="space-y-2">
                     <Label htmlFor="email">Email Address</Label>
-                    <Input id="email" name="email" type="email" value={editedCustomer?.email} onChange={handleChange} disabled={!isEditing} />
+                    <Input id="email" name="email" type="email" value={editedCustomer?.email} onChange={handleChange} disabled={!isEditing} className="h-12" />
                   </div>
                   <div className="space-y-2">
                     <Label htmlFor="username">Username</Label>
-                    <Input id="username" name="username" value={editedCustomer?.username || ""} onChange={handleChange} disabled={!isEditing} />
+                    <Input id="username" name="username" value={editedCustomer?.username || ""} onChange={handleChange} disabled={!isEditing} className="h-12" />
                   </div>
                 </div>
 
@@ -177,23 +177,25 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                       value={editedCustomer?.user?.isDeactivated ? "inactive" : "active"}
                       onValueChange={(value) => handleSelectChange("user.isDeactivated", value === "inactive" ? "true" : "false")}
                     >
-                      <SelectTrigger
-                        className={getAccountStatusColor(editedCustomer?.user?.isDeactivated ? "inactive" : "active") + " disabled:opacity-50 uppercase"}
-                      >
+                      <SelectTrigger className={getAccountStatusColor(editedCustomer?.user?.isDeactivated ? "inactive" : "active") + " disabled:opacity-50 uppercase h-12 text-lg"}>
                         <SelectValue placeholder="Select status" />
                       </SelectTrigger>
                       <SelectContent>
-                        <SelectItem value="active">Enabled</SelectItem>
-                        <SelectItem value="inactive">Disabled</SelectItem>
+                        <SelectItem value="active" className="text-lg">
+                          Enabled
+                        </SelectItem>
+                        <SelectItem value="inactive" className="text-lg">
+                          Disabled
+                        </SelectItem>
                       </SelectContent>
                     </Select>
                   </div>
                   <div className="space-y-2 flex flex-col w-full">
                     <Label htmlFor="status">Subscriber</Label>
                     {customer?.user?.subscriber?.isActive ? (
-                      <div className="ml-1 text-center rounded-sm bg-green-900 text-green-300 opacity-50 p-1">TRUE</div>
+                      <div className="ml-1 text-center text-lg rounded-sm bg-green-900 text-green-300 opacity-50 h-12 flex items-center justify-center p-1">TRUE</div>
                     ) : (
-                      <div className="ml-1 text-center rounded-sm bg-red-900 text-red-300 opacity-50 p-1">FALSE</div>
+                      <div className="ml-1 text-center text-lg rounded-sm bg-red-900 text-red-300 opacity-50 h-12 flex items-center justify-center p-1">FALSE</div>
                     )}
                   </div>
                 </div>
@@ -203,9 +205,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
                     <span className="text-muted-foreground">Account Created: </span>
                     <span>{formatDate(editedCustomer?.createdAt || "")}</span>
                   </div>
-                  {customer?.ageVerifiedAt && (
-                    <span className=" text-white font-light py-1 px-2 rounded-sm bg-green-800">{customer?.ageVerifiedAt && "Age Verified"}</span>
-                  )}
+                  {customer?.ageVerifiedAt && <span className=" text-white font-light py-1 px-2 rounded-sm bg-green-800">{customer?.ageVerifiedAt && "Age Verified"}</span>}
                 </div>
                 <AlertDialog>
                   <AlertDialogTrigger asChild disabled={!isEditing}>
@@ -242,7 +242,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
           </form>
         </TabsContent>
 
-        <TabsContent value="subscription" className="space-y-4 h-auto">
+        <TabsContent forceMount value="subscription" className="space-y-4 [grid-area:1/1] data-[state=inactive]:invisible data-[state=inactive]:pointer-events-none">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
@@ -286,14 +286,8 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
               <div className="grid grid-cols-2 gap-4">
                 <div className="space-y-2">
                   <Label htmlFor="subscriptionStatus">Status</Label>
-                  <Select
-                    disabled={!isEditing}
-                    value={editedCustomer?.user?.recentMembership?.status || ""}
-                    onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}
-                  >
-                    <SelectTrigger
-                      className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase  disabled:opacity-50"}
-                    >
+                  <Select disabled={!isEditing} value={editedCustomer?.user?.recentMembership?.status || ""} onValueChange={(value) => handleSelectChange("user.recentMembership.status", value)}>
+                    <SelectTrigger className={getSubscriptionStatusColor(editedCustomer?.user?.recentMembership?.status || "") + " uppercase  disabled:opacity-50"}>
                       <SelectValue placeholder="NONE" />
                     </SelectTrigger>
                     <SelectContent>
@@ -348,7 +342,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
           </Card>
         </TabsContent>
 
-        <TabsContent value="devices" className="space-y-4 h-auto">
+        <TabsContent forceMount value="devices" className="space-y-4 [grid-area:1/1] data-[state=inactive]:invisible data-[state=inactive]:pointer-events-none">
           <Card>
             <CardHeader>
               <CardTitle className="flex items-center">
@@ -360,16 +354,7 @@ export default function CustomerDetail({ customer, onUpdate }: { customer: Custo
             <CardContent className="space-y-4">
               <div className="space-y-2">
                 <Label htmlFor="deviceCount">Device Count</Label>
-                <Input
-                  id="deviceCount"
-                  name="deviceCount"
-                  type="number"
-                  min="0"
-                  max="10"
-                  value={editedCustomer?.user?.userDevices?.length || 0}
-                  readOnly
-                  disabled
-                />
+                <Input id="deviceCount" name="deviceCount" type="number" min="0" max="10" value={editedCustomer?.user?.userDevices?.length || 0} readOnly disabled />
                 <p className="text-sm text-muted-foreground">Maximum devices allowed: 6</p>
               </div>
 
