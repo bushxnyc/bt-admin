@@ -70,7 +70,7 @@ export default function CustomerDashboard({
     // Open immediately inside the user gesture so Safari iOS doesn't block the popup
     const newTab = window.open("", "_blank");
     try {
-      const res = await fetch(`/api/posthog?email=${encodeURIComponent(customer.email)}`);
+      const res = await fetch(`/api/posthog?email=${encodeURIComponent(customer.email.toLowerCase())}`);
       if (!res.ok) {
         const { error } = await res.json();
         newTab?.close();
@@ -203,12 +203,7 @@ export default function CustomerDashboard({
             <div className="text-sm text-center w-full text-muted-foreground">Showing {formatNumber(total)} customers</div>
           </div>
           <div className="flex items-center justify-center space-x-2 mt-4">
-            <Button
-              variant="outline"
-              size="icon"
-              disabled={parseInt(page) == 1}
-              onClick={() => setPageAction(parseInt(page) > 1 ? (parseInt(page) - 1).toString() : page)}
-            >
+            <Button variant="outline" size="icon" disabled={parseInt(page) == 1} onClick={() => setPageAction(parseInt(page) > 1 ? (parseInt(page) - 1).toString() : page)}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="sm" className="w-8">
@@ -251,9 +246,7 @@ export default function CustomerDashboard({
                               <DrawerTitle>Customer Details</DrawerTitle>
                               <DrawerDescription>View and update customer information</DrawerDescription>
                             </DrawerHeader>
-                            <div className="overflow-y-auto px-4 pb-8">
-                              {selectedCustomer && <CustomerDetail customer={selectedCustomer} onUpdate={handleCustomerUpdate} />}
-                            </div>
+                            <div className="overflow-y-auto px-4 pb-8">{selectedCustomer && <CustomerDetail customer={selectedCustomer} onUpdate={handleCustomerUpdate} />}</div>
                           </DrawerContent>
                         </Drawer>
                       </div>
@@ -265,9 +258,7 @@ export default function CustomerDashboard({
                       <Mail className="h-4 w-4" />
                       <span>{customer?.email.toLowerCase()}</span>
                       {customer?.user.subscriber?.isActive ? <Check className="h-4 w-4 ml-1 text-green-500" /> : <X className="h-4 w-4 ml-1 text-red-500" />}
-                      <span className="text-xs text-white font-light p-0 px-1 rounded-sm uppercase  bg-green-800">
-                        {customer?.ageVerifiedAt && "age verified"}
-                      </span>
+                      <span className="text-xs text-white font-light p-0 px-1 rounded-sm uppercase  bg-green-800">{customer?.ageVerifiedAt && "age verified"}</span>
                     </div>
                     <div className="text-sm text-muted-foreground">ID: {customer?.user.id}</div>
                     <div className="text-sm flex flex-row w-full text-muted-foreground items-center">
@@ -284,9 +275,7 @@ export default function CustomerDashboard({
                         <PopoverContent className="w-80 p-4">
                           <div className="space-y-2">
                             <h4 className="font-medium">Last Login Details</h4>
-                            <p className="text-sm text-muted-foreground">
-                              {customer?.user.lastSignIn ? formatExactDateTime(customer.user.lastSignIn) : "No login recorded"}
-                            </p>
+                            <p className="text-sm text-muted-foreground">{customer?.user.lastSignIn ? formatExactDateTime(customer.user.lastSignIn) : "No login recorded"}</p>
                           </div>
                         </PopoverContent>
                       </Popover>
@@ -340,12 +329,7 @@ export default function CustomerDashboard({
           </div>
 
           <div className="flex items-center justify-center space-x-2 py-4 mt-4">
-            <Button
-              variant="outline"
-              size="icon"
-              disabled={parseInt(page) == 1}
-              onClick={() => setPageAction(parseInt(page) > 1 ? (parseInt(page) - 1).toString() : page)}
-            >
+            <Button variant="outline" size="icon" disabled={parseInt(page) == 1} onClick={() => setPageAction(parseInt(page) > 1 ? (parseInt(page) - 1).toString() : page)}>
               <ChevronLeft className="h-4 w-4" />
             </Button>
             <Button variant="outline" size="sm" className="w-8">
